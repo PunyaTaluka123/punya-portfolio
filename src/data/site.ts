@@ -158,10 +158,17 @@ export const site = {
       slug: 'basketball-shot-tracking',
       name: 'Basketball Shot Tracking System',
       oneLine: 'A computer vision system that tracks basketball shots.',
-      body: ['I built it for my IB Computer Science internal assessment.'],
+      body: [
+        'I built it for my IB Computer Science internal assessment. The IA is a solo software project made for a real client and marked on planning, design, development and evaluation, so I took it from idea to working system on my own.',
+        'Shot tracking is a hard computer vision problem. The ball is small and fast, it blurs, and it has to be picked out from players, the hoop and a busy background.',
+      ],
       facts: [
         { label: 'Area', value: 'Computer vision' },
-        { label: 'My part', value: 'Built it' },
+        {
+          label: 'Context',
+          value: 'IB Computer Science internal assessment (solo, for a real client)',
+        },
+        { label: 'My part', value: 'Built it, start to finish' },
       ],
       tags: ['Computer vision'],
       links: [],

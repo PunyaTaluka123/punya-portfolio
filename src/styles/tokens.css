@@ -65,6 +65,7 @@
   --t-llm-h3: 1.125rem;
   --t-llm-h2: 1.375rem;
   --t-llm-h1: 1.75rem;
+  --t-orbit-core: clamp(2.25rem, 1rem + 2.5vw, 3.25rem);
 
   /* tracking */
   --tr-hero: -0.05em;
@@ -127,6 +128,13 @@
   --line-strong: 2px;
   --focus-w: 3px;
   --radius-pill: 999px;
+  --orbit-size: 56rem; /* experience circle */
+  --orbit-r: 34%; /* ring radius, as a share of the circle's width */
+  --orbit-chip: 13rem;
+  --orbit-pull: 8rem; /* how far from the centre roles fly in */
+  --pop-w: 32rem; /* comment box width */
+  --tail: 14px;
+  --node: 9px;
   --radius: 2px;
 
   /* motion */
@@ -139,6 +147,10 @@
   --m-hero-delay: 80ms;
   --m-rail-delay: 450ms;
   --m-off: 0.01ms; /* reduced motion: effectively instant */
+  --m-orbit: 90s; /* one turn of the dashed ring */
+  --m-vt-out: 140ms;
+  --m-vt-in: 260ms;
+  --m-vt-delay: 90ms;
   --rise-from: 130%; /* hero letters start below their clip mask */
   --m-cursor-lerp: 0.18;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

@@ -29,27 +29,33 @@ Punya Taluka. "Data Science and AI student at NTU Singapore. I build ML systems,
 Matches `<facts>`: Name; Role line.
 
 **What do they study?**
-A BSc in Data Science and Artificial Intelligence at NTU Singapore. Year 1, class of 2030. Before that, the IB Diploma (May 2026), with a score of 42/45 and a 7 in Math AA HL.
-Matches `<facts>`: Education (both lines).
+A BSc in Data Science and Artificial Intelligence at NTU Singapore: Year 1, class of 2030. Before that, the IB Diploma (May 2026), with a score of 42/45 (Physics HL, Chemistry HL, Math AA HL with a 7, Computer Science HL, English SL, Hindi SL). SAT 1560.
+Matches `<facts>` (Education) plus the resumes (subjects, SAT); see FACT_AUDIT rows 11 to 13.
 
 **Where did they work?**
 
-- KDK Softwares: intern. Backend performance and security, and a migration from PHP to Go.
 - Datathon organizing team: Academic Lead, October 2026. More than 450 participants. Designed the problem prompts and built the live leaderboard website.
-- FRC Team Kaizen: Lead Programmer in the Reefscape 2025 season. Coordinated technical and outreach work. As a rookie team they qualified for the FIRST World Championships, and they won Excellence in Engineering awards, including one in the Newton Division.
+- FRC Team Kaizen: Lead Programmer, 2024 – 2025 (Reefscape season).
+  - Led the autonomous and control software.
+  - Built a 15-second camera-tracking autonomous routine.
+  - Tuned PID loops.
+  - Mentored juniors in Java.
+  - The rookie team qualified for the FIRST World Championships and won Excellence in Engineering awards, including one in the Newton Division.
+- KDK Softwares: Backend Intern, Summer 2023. Migrated a codebase from PHP to Go on a live taxation platform, hardened authentication and input validation, and debugged production issues.
 - StemCast: co-founder of a podcast for STEM outreach.
-- Mentor: taught web development to middle school students.
+- School coding club (grades 6–8): mentor; taught HTML and CSS.
 
-Matches `<facts>`: all five Experience lines.
+Matches `<facts>` (all five Experience lines) plus the resume details; see FACT_AUDIT rows 16 to 29.
 
 **What are the featured projects?**
 
-1. BiogasBoosters: a framework to optimize biogas production.
+1. BiogasBoosters: a framework to optimize biogas production. It has a measured 33% increase in biogas production, and deployment is planned for 2027.
 2. Basketball Shot Tracking System: a computer vision system that tracks basketball shots.
 3. DermaTrack: an AI tool for dermatology that Punya designed.
+4. DengueRadar: dengue risk forecasting for Singapore, on Databricks.
 
 The page also lists other projects: AgriBot, OrthoTrack and Sign language detection.
-Matches `<facts>`: Featured projects 1 to 3; Other projects. DermaTrack uses "designed".
+Matches `<facts>` (Featured projects 1 to 3, Other projects) plus the latest resume (DengueRadar). DermaTrack uses "designed".
 
 **How do I contact them?**
 Email talukapunya.1@gmail.com. GitHub: https://github.com/PunyaTaluka123. LinkedIn: https://www.linkedin.com/in/punyataluka/.

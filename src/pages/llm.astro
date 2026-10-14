@@ -28,13 +28,13 @@ import { site } from '../data/site';
         </li>
         <li>
           GitHub:{' '}
-          <a href={site.links.github} rel="noopener noreferrer">
+          <a href={site.links.github} rel="noopener noreferrer" target="_blank">
             {site.links.github}
           </a>
         </li>
         <li>
           LinkedIn:{' '}
-          <a href={site.links.linkedin} rel="noopener noreferrer">
+          <a href={site.links.linkedin} rel="noopener noreferrer" target="_blank">
             {site.links.linkedin}
           </a>
         </li>
@@ -44,12 +44,14 @@ import { site } from '../data/site';
       {site.about.map((p) => (
         <p>{p}</p>
       ))}
+      <p>{site.availability}</p>
 
       <h2>Education</h2>
       <ul>
         {site.education.map((e) => (
           <li>
-            {e.school}: {e.detail} ({e.when})
+            {e.school}: {e.detail}
+            {e.when && ` (${e.when})`}
           </li>
         ))}
       </ul>
@@ -88,7 +90,7 @@ import { site } from '../data/site';
             {p.links.map((l) => (
               <li>
                 {l.label}:{' '}
-                <a href={l.href} rel="noopener noreferrer">
+                <a href={l.href} rel="noopener noreferrer" target="_blank">
                   {l.href}
                 </a>
               </li>
@@ -115,6 +117,9 @@ import { site } from '../data/site';
       <ul>
         <li>Languages: {site.skills.languages.join(', ')}</li>
         <li>Areas: {site.skills.areas.join(', ')}</li>
+        <li>ML libraries: {site.skills.ml.join(', ')}</li>
+        <li>Tools: {site.skills.tools.join(', ')}</li>
+        <li>Spoken languages: {site.spoken.join(', ')}</li>
       </ul>
 
       <h2>Interests</h2>

@@ -5,9 +5,13 @@ import { site } from '../data/site';
 const words = site.name.split(' ');
 const total = String(site.projects.length).padStart(2, '0');
 const pad = (n: number) => String(n).padStart(2, '0');
-const ext = { rel: 'noopener noreferrer' };
-const [ntu, ib] = site.education;
+const ext = { rel: 'noopener noreferrer', target: '_blank' };
 const [emailUser, emailHost] = site.email.split('@');
+
+// Experience orbit: roles sit on a circle. A role in the lower half opens its
+// comment box above itself, so the box stays on the page.
+const n = site.experience.length;
+const opensAbove = (i: number) => Math.sin(((i / n) * 360 - 90) * (Math.PI / 180)) > 0.25;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -27,9 +31,9 @@ const jsonLd = {
   <section class="hero" aria-labelledby="hero-name">
     <canvas class="field" aria-hidden="true"></canvas>
     <p class="rail rail-top mono">
-      <span>Data Science + AI</span>
-      <span>{site.school}</span>
-      <span>{ntu?.when}</span>
+      {site.copy.railTop.map((t) => (
+        <span>{t}</span>
+      ))}
     </p>
     <!-- One copy of the name: letters are split for the stagger, aria-label keeps it whole. -->
     <h1 id="hero-name" class="hero-name" aria-label={site.name}>
@@ -48,16 +52,17 @@ const jsonLd = {
       <p class="role">{site.roleLine}</p>
       <p class="cta">
         <a class="btn btn-solid" href="#projects">
-          See the projects
+          {site.copy.ctaProjects}
         </a>
         <a class="btn" href={`mailto:${site.email}`}>
-          Email me
+          {site.copy.ctaEmail}
         </a>
       </p>
     </div>
     <p class="rail rail-bottom mono">
-      <span>Computer vision / ML systems</span>
-      <span>Scroll ↓</span>
+      {site.copy.railBottom.map((t) => (
+        <span>{t}</span>
+      ))}
     </p>
   </section>
 
@@ -71,21 +76,23 @@ const jsonLd = {
       <div class="about-grid">
         <div class="prose reveal">
           <p>{site.about[0]}</p>
-          <p>{site.about[2]}</p>
+          {site.about.slice(2).map((p) => (
+            <p>{p}</p>
+          ))}
+          <p class="availability">{site.availability}</p>
         </div>
         <dl class="facts reveal">
           <div>
             <dt class="mono">Education</dt>
-            <dd>
-              <strong>{ntu?.school}</strong>
-            </dd>
-            <dd>
-              {ntu?.detail}. {ntu?.when}.
-            </dd>
-            <dd>
-              <strong>{ib?.school}</strong>, {ib?.when}
-            </dd>
-            <dd>{ib?.detail}</dd>
+            {site.education.map((e) => (
+              <>
+                <dd>
+                  <strong>{e.school}</strong>
+                  {e.when && `, ${e.when}`}
+                </dd>
+                <dd>{e.detail}</dd>
+              </>
+            ))}
           </div>
           <div>
             <dt class="mono">Recognition</dt>
@@ -93,37 +100,60 @@ const jsonLd = {
               <dd>{r}</dd>
             ))}
           </div>
+          <div>
+            <dt class="mono">Languages I speak</dt>
+            <dd>{site.spoken.join(', ')}</dd>
+          </div>
         </dl>
       </div>
     </div>
   </section>
 
-  <section id="experience" class="section" aria-labelledby="xp-h">
-    <div class="sec-head">
-      <span class="mono">02</span>
-      <h2 id="xp-h">Experience</h2>
+  <section id="experience" class="section xp-section" aria-labelledby="xp-h">
+    <div class="orbit">
+      <div class="orbit-core sec-head">
+        <span class="mono">02</span>
+        <h2 id="xp-h">Experience</h2>
+        <p class="mono hint" aria-hidden="true">
+          {site.copy.experienceHint}
+        </p>
+      </div>
+      <ol class={`orbit-list n-${n}`}>
+        {site.experience.map((x, i) => (
+          <li class:list={['orbit-item', opensAbove(i) ? 'opens-above' : 'opens-below']}>
+            <button class="orbit-title" type="button" popovertarget={`xp-${i}`}>
+              {x.when && <span class="mono when">{x.when}</span>}
+              <span class="role">{x.role}</span>
+              <span class="org">{x.org}</span>
+            </button>
+            <div id={`xp-${i}`} class="xp-pop" popover>
+              <h3>
+                {x.role}
+                <span class="org">
+                  <span class="sep">{' · '}</span>
+                  {x.org}
+                </span>
+              </h3>
+              {x.when && <p class="mono when">{x.when}</p>}
+              <ul>
+                {x.points.map((pt) => (
+                  <li>{pt}</li>
+                ))}
+              </ul>
+              <button
+                class="pop-close"
+                type="button"
+                popovertarget={`xp-${i}`}
+                popovertargetaction="hide"
+                aria-label={`Close ${x.role}, ${x.org}`}
+              >
+                ×
+              </button>
+            </div>
+          </li>
+        ))}
+      </ol>
     </div>
-    <ol class="sec-body xp reveal">
-      {site.experience.map((x) => (
-        <li class="xp-row">
-          <h3>
-            {x.role}
-            <span class="org">
-              <span class="sep">{' · '}</span>
-              {x.org}
-            </span>
-          </h3>
-          {x.when && <p class="when mono">{x.when}</p>}
-          <div>
-            <ul>
-              {x.points.map((pt) => (
-                <li>{pt}</li>
-              ))}
-            </ul>
-          </div>
-        </li>
-      ))}
-    </ol>
   </section>
 
   <section id="projects" class="section projects" aria-labelledby="projects-h">
@@ -207,6 +237,22 @@ const jsonLd = {
         </ul>
       </div>
       <div>
+        <h3>ML libraries</h3>
+        <ul class="mid-list">
+          {site.skills.ml.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3>Tools</h3>
+        <ul class="chip-list">
+          {site.skills.tools.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
         <h3>Interests</h3>
         <ul class="chip-list">
           {site.interests.map((s) => (
@@ -223,7 +269,7 @@ const jsonLd = {
       <h2 id="contact-h">Contact</h2>
     </div>
     <div class="sec-body prose contact-body reveal">
-      <p class="lead">Want to talk ML, computer vision or a project? Send me an email.</p>
+      <p class="lead">{site.copy.contactLead}</p>
       <p>
         <!-- prettier-ignore -->
         <a class="contact-email" href={`mailto:${site.email}`}>{emailUser}<wbr />@{emailHost}</a>
@@ -232,11 +278,13 @@ const jsonLd = {
         <li>
           <a class="draw" href={site.links.github} {...ext}>
             GitHub: {site.handles.github}
+            <span class="sr-only"> (opens in a new tab)</span>
           </a>
         </li>
         <li>
           <a class="draw" href={site.links.linkedin} {...ext}>
             LinkedIn: {site.handles.linkedin}
+            <span class="sr-only"> (opens in a new tab)</span>
           </a>
         </li>
       </ul>

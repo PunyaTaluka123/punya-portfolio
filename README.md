@@ -30,21 +30,38 @@ Other scripts:
 
 ## Edit the content
 
-All text lives in **`src/data/site.ts`**: name, role line, about, education, experience, projects, skills, interests and links. Edit it, then run `npm run build`. These all regenerate from it:
+**All text on the site lives in one file: [`src/data/site.ts`](src/data/site.ts).** Edit it, save, and the dev server updates. Every page, `#glance`, `/llm`, `/portfolio.md`, `/content.json`, `/llms.txt` and the JSON-LD regenerate from it.
 
-- the home page, `/projects/[slug]`, `/404` and `/llm`
-- `#glance` (the LLM summary block) and the JSON-LD `Person`
-- `/portfolio.md`, `/content.json`, `/llms.txt`, `/sitemap.xml` and `/site.webmanifest`
+| What you see                                                              | Where in `site.ts`                                                                                                |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Name, role line, email, GitHub, LinkedIn                                  | `name`, `roleLine`, `email`, `links`, `handles` (top of the file)                                                 |
+| Small hero labels, button text, the experience hint, the contact sentence | `copy`                                                                                                            |
+| About paragraphs                                                          | `about` (item 2 is the big lead sentence)                                                                         |
+| Work-pass line under About                                                | `availability`                                                                                                    |
+| Education, SAT                                                            | `education`                                                                                                       |
+| Experience (orbit titles and comment boxes)                               | `experience`: `role`, `org`, `when` and `points` (the bullets)                                                    |
+| Project cards and project pages                                           | `projects`: `oneLine` for the card, `body` for the page paragraphs, `facts` for the details list, `tags`, `links` |
+| "Also: AgriBot…"                                                          | `otherProjects`                                                                                                   |
+| Recognition                                                               | `recognition`                                                                                                     |
+| Skills section                                                            | `skills` (languages, areas, ml, tools) and `interests`                                                            |
+| Languages you speak                                                       | `spoken`                                                                                                          |
+
+Text that is **not** in `site.ts` (labels and page furniture):
+
+- [`src/layouts/Base.astro`](src/layouts/Base.astro): header nav labels, the LLM-view button labels, the "At a glance" labels, footer link labels.
+- [`src/pages/index.astro`](src/pages/index.astro): section headings (About, Experience, Projects, Skills, Contact) and the small group labels in Skills.
+- [`src/pages/404.astro`](src/pages/404.astro): the 404 page text.
+- [`src/pages/projects/[slug].astro`](src/pages/projects/[slug].astro): "← All projects", "Previous", "Next".
 
 Rules that the gates enforce:
 
 - **Every claim must trace to a source.** Add a row to `FACT_AUDIT.md` for any new claim.
 - **DermaTrack** says "designed", never "built" or "launched".
-- **BiogasBoosters** states its 2027 deployment and 33% figure as a plan and target, never as a result.
+- **BiogasBoosters:** the only result allowed is the 33%, and it must be labelled "measured".
 - Don't use hype words ("passionate", "leverage", "cutting-edge", "synergy").
 - Don't add a phone number or a home address.
 
-Adding a featured project: add an object to `projects`. Its page appears at `/projects/<slug>`. The home card, glance, Markdown, JSON and llms.txt pick it up automatically. The CSS handles up to six featured projects. For more, extend the `.vt-N` and `.card:nth-child(N)` rules in `src/styles/global.css`.
+Adding a featured project: add an object to `projects`. Its page appears at `/projects/<slug>`, and everything else picks it up automatically. The CSS handles up to six featured projects and up to eight experience roles.
 
 If you change the name or role line, run `npm run assets` to refresh the Open Graph image.
 

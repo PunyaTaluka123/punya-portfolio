@@ -14,7 +14,9 @@ interface Props {
 const props = Astro.props;
 const home = Astro.url.pathname.replace(/(index)?\.html$/, '') === '/';
 const sec = (id: string) => (home ? `#${id}` : `/#${id}`);
-const ext = { rel: 'noopener noreferrer' };
+// Links that leave the page open in a new tab; in-page anchors and project pages don't.
+const ext = { rel: 'noopener noreferrer', target: '_blank' };
+const newTab = { target: '_blank' };
 ---
 
 <!doctype html>
@@ -61,10 +63,10 @@ const ext = { rel: 'noopener noreferrer' };
       </nav>
       <div class="actions">
         <a class="draw" href={site.links.github} {...ext}>
-          GitHub
+          GitHub<span class="sr-only"> (opens in a new tab)</span>
         </a>
         <a class="draw" href={site.links.linkedin} {...ext}>
-          LinkedIn
+          LinkedIn<span class="sr-only"> (opens in a new tab)</span>
         </a>
         <button
           id="theme-toggle"
@@ -118,10 +120,12 @@ const ext = { rel: 'noopener noreferrer' };
             <dd>
               <a href={site.links.github} {...ext}>
                 GitHub: {site.links.github}
+                <span class="sr-only"> (opens in a new tab)</span>
               </a>
               <br />
               <a href={site.links.linkedin} {...ext}>
                 LinkedIn: {site.links.linkedin}
+                <span class="sr-only"> (opens in a new tab)</span>
               </a>
             </dd>
           </div>
@@ -148,7 +152,9 @@ const ext = { rel: 'noopener noreferrer' };
           <button id="copy-md" type="button">
             Copy as Markdown
           </button>
-          <a href="/portfolio.md">Open /portfolio.md</a>
+          <a href="/portfolio.md" {...newTab}>
+            Open /portfolio.md<span class="sr-only"> (opens in a new tab)</span>
+          </a>
         </div>
         <p id="copy-status" role="status"></p>
       </section>
@@ -159,23 +165,23 @@ const ext = { rel: 'noopener noreferrer' };
       <p>© 2026 {site.name}</p>
       <ul>
         <li>
-          <a class="draw" href="/llm">
-            Machine-readable version
+          <a class="draw" href="/llm" {...newTab}>
+            Machine-readable version<span class="sr-only"> (opens in a new tab)</span>
           </a>
         </li>
         <li>
-          <a class="draw" href="/llms.txt">
-            llms.txt
+          <a class="draw" href="/llms.txt" {...newTab}>
+            llms.txt<span class="sr-only"> (opens in a new tab)</span>
           </a>
         </li>
         <li>
-          <a class="draw" href="/portfolio.md">
-            portfolio.md
+          <a class="draw" href="/portfolio.md" {...newTab}>
+            portfolio.md<span class="sr-only"> (opens in a new tab)</span>
           </a>
         </li>
         <li>
-          <a class="draw" href="/content.json">
-            content.json
+          <a class="draw" href="/content.json" {...newTab}>
+            content.json<span class="sr-only"> (opens in a new tab)</span>
           </a>
         </li>
       </ul>

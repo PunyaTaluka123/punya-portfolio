@@ -12,8 +12,11 @@
     if (/[?&]view=llm\b/.test(location.search)) d.setAttribute('data-view', 'llm');
   }
   // LLM view has no motion, so skip cross-document view transitions there.
+  // Also skip on back/forward: the user expects an instant return, and fading the
+  // project page over the sticky project stack looks like a glitch.
   function skip(e) {
-    if (e.viewTransition && d.getAttribute('data-view') === 'llm')
+    var type = e.activation ? e.activation.navigationType : '';
+    if (e.viewTransition && (d.getAttribute('data-view') === 'llm' || type === 'traverse'))
       e.viewTransition.skipTransition();
   }
   addEventListener('pageswap', skip);

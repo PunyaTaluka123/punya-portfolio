@@ -553,95 +553,325 @@ button {
   gap: var(--s-7);
 }
 
-/* Experience */
-.xp {
-  list-style: none;
-  padding: 0;
-  border-top: var(--line) solid var(--c-line);
-}
-
-.xp-row {
-  position: relative;
+/* Experience: roles on an orbit; each opens a comment box (native popover).
+   Small screens get a vertical line of roles instead of a circle. */
+.orbit {
   display: grid;
-  gap: var(--s-2);
-  padding: var(--s-5) 0;
-  border-bottom: var(--line) solid var(--c-line);
+  gap: var(--s-6);
 }
 
-.xp-row::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: calc(-1 * var(--line));
-  width: 100%;
-  height: var(--line-strong);
-  background: var(--c-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--m-slow) var(--ease-out);
-}
-
-.xp-row:hover::before {
-  transform: scaleX(1);
-}
-
-.xp-row .when {
+.orbit-core .hint {
+  display: none;
   color: var(--c-muted);
 }
 
-.xp-row h3 {
-  font-size: var(--t-h3);
-  line-height: 1.1;
+.orbit-list {
+  display: grid;
+  gap: var(--s-4);
+  margin: 0;
+  padding: 0 0 0 var(--s-5);
+  list-style: none;
+  border-left: var(--line) solid var(--c-line);
 }
 
-.xp-row h3 .org {
+.orbit-item {
+  position: relative;
+  --a: calc(var(--k, 0) / var(--n, 1) * 360deg - 90deg);
+}
+
+.orbit-item:nth-child(1) {
+  --k: 0;
+  --anchor: --xp-1;
+}
+
+.orbit-item:nth-child(2) {
+  --k: 1;
+  --anchor: --xp-2;
+}
+
+.orbit-item:nth-child(3) {
+  --k: 2;
+  --anchor: --xp-3;
+}
+
+.orbit-item:nth-child(4) {
+  --k: 3;
+  --anchor: --xp-4;
+}
+
+.orbit-item:nth-child(5) {
+  --k: 4;
+  --anchor: --xp-5;
+}
+
+.orbit-item:nth-child(6) {
+  --k: 5;
+  --anchor: --xp-6;
+}
+
+.orbit-item:nth-child(7) {
+  --k: 6;
+  --anchor: --xp-7;
+}
+
+.orbit-item:nth-child(8) {
+  --k: 7;
+  --anchor: --xp-8;
+}
+
+.n-1 {
+  --n: 1;
+}
+
+.n-2 {
+  --n: 2;
+}
+
+.n-3 {
+  --n: 3;
+}
+
+.n-4 {
+  --n: 4;
+}
+
+.n-5 {
+  --n: 5;
+}
+
+.n-6 {
+  --n: 6;
+}
+
+.n-7 {
+  --n: 7;
+}
+
+.n-8 {
+  --n: 8;
+}
+
+/* node on the line (small screens) */
+.orbit-item::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--s-5) - var(--node) / 2);
+  top: var(--s-5);
+  width: var(--node);
+  height: var(--node);
+  border-radius: 50%;
+  background: var(--c-accent);
+}
+
+.orbit-title {
+  display: grid;
+  gap: var(--s-1);
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--s-3) var(--s-4);
+  text-align: left;
+  background: var(--c-bg);
+  border: var(--line) solid var(--c-line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform var(--m-base) var(--ease-out);
+}
+
+.orbit-title:hover {
+  transform: translateY(calc(-1 * var(--lift-sm)));
+}
+
+.orbit-title .when,
+.orbit-title .org {
+  color: var(--c-muted);
+}
+
+.orbit-title .role {
+  font-family: var(--f-display);
+  font-size: var(--t-label);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: var(--tr-snug);
+}
+
+.orbit-item:has(:popover-open) .orbit-title {
+  border-color: var(--c-accent);
+  background: var(--c-surface);
+}
+
+/* The comment box */
+.xp-pop {
+  width: min(var(--pop-w), calc(100vw - 2 * var(--gutter)));
+  padding: var(--s-5);
+  overflow: visible;
+  color: var(--c-ink);
+  background: var(--c-bg);
+  border: var(--line) solid var(--c-ink);
+  border-top: var(--bracket-w) solid var(--c-accent);
+}
+
+.xp-pop h3 {
+  padding-right: var(--s-7);
+  font-size: var(--t-label);
+  line-height: 1.2;
+}
+
+.xp-pop h3 .org {
   display: block;
   color: var(--c-muted);
   font-weight: 500;
 }
 
-.xp-row h3 .sep {
+.xp-pop h3 .sep {
   display: none;
 }
 
-@media (min-width: 640px) {
-  .xp-row h3 .org,
-  .xp-row h3 .sep {
-    display: inline;
-  }
+.xp-pop .when {
+  margin-top: var(--s-1);
+  color: var(--c-muted);
 }
 
-.xp-row ul {
+.xp-pop ul {
   display: grid;
-  gap: var(--s-1);
+  gap: var(--s-2);
+  margin-top: var(--s-3);
   padding-left: var(--list-indent);
-  max-width: var(--measure);
 }
 
-.xp-row li::marker {
+.xp-pop li::marker {
   color: var(--c-accent);
 }
 
+.pop-close {
+  position: absolute;
+  top: var(--s-2);
+  right: var(--s-2);
+  width: var(--tap);
+  height: var(--tap);
+  font-size: var(--t-label);
+  color: var(--c-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.pop-close:hover {
+  color: var(--c-ink);
+}
+
+/* Anchor the box to its title, with a tail pointing at it. Browsers without anchor
+   positioning show the box centred on screen instead, which still works. */
+@supports (position-area: bottom) {
+  .orbit-title {
+    anchor-name: var(--anchor);
+  }
+
+  .xp-pop {
+    inset: auto;
+    margin: var(--s-4) 0;
+    position-anchor: var(--anchor);
+    position-area: bottom;
+    position-try-fallbacks:
+      bottom span-right,
+      bottom span-left,
+      top;
+  }
+
+  .xp-pop::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: calc(var(--tail) / -2 - var(--bracket-w) / 2);
+    width: var(--tail);
+    height: var(--tail);
+    background: var(--c-bg);
+    border-top: var(--bracket-w) solid var(--c-accent);
+    border-left: var(--bracket-w) solid var(--c-accent);
+    transform: translateX(-50%) rotate(45deg);
+  }
+}
+
 @media (min-width: 900px) {
-  .xp-row {
-    grid-template-columns: var(--xp-date-col) minmax(0, 1fr);
-    column-gap: var(--s-6);
+  .xp-section .orbit {
+    grid-column: 1 / -1;
+  }
+}
+
+/* The circle */
+@media (min-width: 1000px) {
+  .xp-section .orbit {
+    position: relative;
+    place-items: center;
+    width: min(100%, var(--orbit-size));
+    aspect-ratio: 1;
+    margin-inline: auto;
   }
 
-  .xp-row .when {
-    grid-column: 1;
-    grid-row: 1;
-    padding-top: var(--when-offset);
+  .orbit::before {
+    content: '';
+    position: absolute;
+    inset: calc(50% - var(--orbit-r));
+    pointer-events: none;
+    border: var(--line) dashed var(--c-line);
+    border-radius: 50%;
   }
 
-  .xp-row h3,
-  .xp-row > div {
-    grid-column: 2;
+  .orbit-core {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s-2);
+    text-align: center;
   }
 
-  .xp-row > div {
-    display: grid;
-    gap: var(--s-3);
+  .orbit-core h2 {
+    font-size: var(--t-orbit-core);
+  }
+
+  .orbit-core .hint {
+    display: block;
+  }
+
+  .orbit-list {
+    position: absolute;
+    inset: 0;
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+
+  .orbit-item {
+    position: absolute;
+    left: calc(50% + cos(var(--a)) * var(--orbit-r));
+    top: calc(50% + sin(var(--a)) * var(--orbit-r));
+    width: var(--orbit-chip);
+    transform: translate(-50%, -50%);
+  }
+
+  .orbit-item::before {
+    content: none;
+  }
+
+  .orbit-title {
+    justify-items: center;
+    text-align: center;
+  }
+
+  @supports (position-area: bottom) {
+    .opens-above .xp-pop {
+      position-area: top;
+      position-try-fallbacks:
+        top span-right,
+        top span-left,
+        bottom;
+      border-top: var(--line) solid var(--c-ink);
+      border-bottom: var(--bracket-w) solid var(--c-accent);
+    }
+
+    .opens-above .xp-pop::before {
+      top: auto;
+      bottom: calc(var(--tail) / -2 - var(--bracket-w) / 2);
+      transform: translateX(-50%) rotate(225deg);
+    }
   }
 }
 
@@ -945,13 +1175,18 @@ button {
     grid-column: 1 / -1;
   }
 
-  .skills > :nth-child(2) {
+  .skills > :nth-child(2n) {
     grid-column: 1 / span 5;
   }
 
-  .skills > :nth-child(3) {
+  .skills > :nth-child(2n + 3) {
     grid-column: 6 / -1;
   }
+}
+
+.availability {
+  padding-left: var(--s-4);
+  border-left: var(--line-strong) solid var(--c-accent);
 }
 
 /* Contact */
@@ -1388,8 +1623,76 @@ button {
     }
   }
 
+  /* Experience orbit: roles fly out from the centre as the section enters,
+     the dashed ring turns slowly, comment boxes pop in. */
+  @media (min-width: 1000px) {
+    :root:not([data-view='llm']) .orbit::before {
+      animation: spin var(--m-orbit) linear infinite;
+    }
+
+    @supports (animation-timeline: view()) {
+      :root:not([data-view='llm']) .xp-section .orbit {
+        view-timeline: --orbit block;
+      }
+
+      :root:not([data-view='llm']) .orbit-item {
+        animation: orbit-in linear backwards;
+        animation-timeline: --orbit;
+        animation-range: entry calc(10% + var(--k) * 5%) cover calc(35% + var(--k) * 4%);
+      }
+    }
+  }
+
+  :root:not([data-view='llm']) .xp-pop:popover-open {
+    animation: pop-in var(--m-base) var(--ease-out);
+  }
+
+  /* Page changes: old page fades out, then the new one fades in. A plain cross-fade
+     overlaps two busy pages (and the sticky project stack) for a moment. */
   @view-transition {
     navigation: auto;
+    types: page;
+  }
+
+  html:active-view-transition-type(page)::view-transition-old(*) {
+    animation: vt-out var(--m-vt-out) var(--ease-in-out) both;
+  }
+
+  html:active-view-transition-type(page)::view-transition-new(root) {
+    animation: vt-in var(--m-vt-in) var(--ease-out) var(--m-vt-delay) both;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes orbit-in {
+  from {
+    translate: calc(cos(var(--a)) * var(--orbit-pull) * -1)
+      calc(sin(var(--a)) * var(--orbit-pull) * -1);
+    scale: 0.6;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--bracket-off);
+  }
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
   }
 }
 
@@ -1470,7 +1773,7 @@ button {
   transform: none !important;
 }
 
-:root[data-view='llm'] main :is(p, ul, ol, dl, .xp-row, .card article, .spec-wrap) {
+:root[data-view='llm'] main :is(p, ul, ol, dl, .card article, .spec-wrap) {
   margin-block: 0 var(--s-4);
 }
 
@@ -1500,7 +1803,7 @@ button {
   letter-spacing: 0;
 }
 
-:root[data-view='llm'] :is(h3, .card-title, .xp-row h3, .pager .name) {
+:root[data-view='llm'] :is(h3, .card-title, .xp-pop h3, .pager .name) {
   font-size: var(--t-llm-h3);
   letter-spacing: 0;
   line-height: 1.4;
@@ -1523,26 +1826,64 @@ button {
   margin-bottom: var(--s-5);
 }
 
-:root[data-view='llm'] :is(.xp, .xp-row, .project-hero) {
+:root[data-view='llm'] .project-hero {
   margin-inline: 0;
   padding: 0;
   border: 0;
 }
 
-:root[data-view='llm'] .xp-row::before {
-  content: none;
+:root[data-view='llm'] :where(.orbit, .orbit-list, .orbit-item) {
+  position: static;
+  display: block;
+  width: auto;
+  aspect-ratio: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  transform: none;
+}
+
+/* Separate selectors: pseudo-elements are not allowed inside :is(), and one invalid
+   entry silently drops the whole rule. */
+:root[data-view='llm'] :is(.orbit-title, .orbit-core .hint, .pop-close),
+:root[data-view='llm'] .orbit::before,
+:root[data-view='llm'] .orbit-item::before,
+:root[data-view='llm'] .xp-pop::before {
+  display: none !important;
+}
+
+:root[data-view='llm'] .orbit-core {
+  align-items: baseline;
+  text-align: left;
+}
+
+/* Every comment box shows inline, in order, as heading + bullets. */
+:root[data-view='llm'] .xp-pop h3 :is(.org, .sep) {
+  display: inline;
+}
+
+:root[data-view='llm'] .xp-pop {
+  display: block;
+  position: static;
+  inset: auto;
+  width: auto;
+  margin: 0 0 var(--s-5);
+  padding: 0;
+  overflow: visible;
+  color: inherit;
+  background: none;
+  border: 0;
 }
 
 :root[data-view='llm'] .card-title a::after {
   content: none;
 }
 
-:root[data-view='llm'] :is(.prose, .facts, .stack, .xp, .cta, .skills) > * + * {
+:root[data-view='llm'] :is(.prose, .facts, .stack, .cta, .skills) > * + * {
   margin-top: var(--s-3);
 }
 
-:root[data-view='llm'] .stack,
-:root[data-view='llm'] .xp-row {
+:root[data-view='llm'] .stack {
   display: block;
 }
 

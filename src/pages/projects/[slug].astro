@@ -47,8 +47,9 @@ const pad = (k: number) => String(k).padStart(2, '0');
           <ul class="project-links">
             {project.links.map((l) => (
               <li>
-                <a class="btn" href={l.href} rel="noopener noreferrer">
+                <a class="btn" href={l.href} rel="noopener noreferrer" target="_blank">
                   {l.label}
+                  <span class="sr-only"> (opens in a new tab)</span>
                 </a>
               </li>
             ))}

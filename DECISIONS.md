@@ -92,3 +92,41 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 ## D17. CI uses Node 24 and actions pinned to commit SHAs
 
 - `verify.mjs` imports `src/data/site.ts` directly through Node's built-in TypeScript type stripping (Node 22.18 and newer), so it never duplicates content. The actions are pinned to full commit SHAs, with the version noted in a comment.
+
+## D18. Details from the owner's resumes (2026-10-14)
+
+- The owner shared 19 resume PDFs. Two are someone else's (Devarsh Bagla), so I did not use them. From the other 17 I added what was new and consistent across versions, mostly from the latest general resume (2026-09-29):
+  - experience: titles and dates, the FRC camera-tracking routine, the KDK taxation-platform work, the coding-club grades
+  - DermaTrack: model work and evaluation details
+  - BiogasBoosters: architecture
+  - DengueRadar: a new featured project
+  - SAT, IB subjects, CERN Beamline for Schools, the IRIS details, skills, tools, work-pass eligibility, spoken languages
+- **Left out on purpose:**
+  - phone numbers and home addresses (the brief forbids them)
+  - the IJSAT paper and the Harvard Stat 110 self-study (dropped from later resumes, or in only one tailored version)
+  - the revenue model
+- **Open question for the owner:** the resumes say BiogasBoosters "raised simulated methane yield 30% vs 12.5% for the XGBoost baseline". The site says "measured 33% increase in biogas production", as the owner confirmed in chat. Both can't be the headline number, so the site keeps the owner's 33% until told otherwise.
+- DermaTrack keeps "designed" even though the resumes say "built", because the brief's rule is explicit.
+
+## D19. Links that leave the page open in a new tab
+
+- That covers external links (GitHub, LinkedIn, the project repo) and the machine-readable files (`/llm`, `llms.txt`, `portfolio.md`, `content.json`). Each has `target="_blank"`, `rel="noopener noreferrer"` and a visually hidden "(opens in a new tab)" for screen readers.
+- In-page anchors (#about …), project pages and `mailto:` stay in the same tab. A section anchor in a new tab makes no sense, and cross-document View Transitions only run within one tab.
+
+## D20. Experience as an orbit with comment boxes
+
+- At 1000 px and wider, the roles sit on a dashed ring around "Experience", with each position computed with CSS `cos()`/`sin()`. Clicking a role opens its details as a comment box with an accent tail. Below 1000 px, a circle doesn't fit, so the roles become a vertical line with nodes, and the same boxes open below them.
+- **No-JS mechanism:** the native Popover API (`popover` + `popovertarget`) gives toggling, Esc and click-outside closing, one box at a time and `aria-expanded`. CSS anchor positioning attaches the box to its title. Without anchor support the box appears centred, which still works.
+- **Fit with the page:** it reuses the hairline rules, the mono metadata, the orange accent and the "detection label" look from the project cards, so it reads as part of the same system. The ring turns slowly (90 s per turn) and the titles fly out from the centre on scroll. The titles themselves stay still, because moving buttons are hard to click. All motion is off with reduced motion and in the LLM view.
+- **Trade-off:** details now take a click, which slows a 30-second skim. To offset that, every title shows role, organisation and dates. The details are still in the HTML, and the LLM view, `/llm`, Markdown and JSON show everything inline.
+
+## D21. Cursor ring jumped on links and cards
+
+- The ring was positioned with `transform: translate3d(x, y)` and grown with the `scale` property. CSS applies `scale` on top of `transform`, so growing it to 1.9× also multiplied its position, and the ring flew away from the pointer. It is now positioned with the `translate` property, which composes correctly.
+
+## D22. Glitch when going back to the project stack
+
+- The page transition cross-faded the project page over the home page. For about 0.4 s both were visible on top of the sticky project stack. Fixes:
+  - back/forward navigation skips the transition (it should feel instant)
+  - link navigations use a short "fade out, then fade in" (a view-transition type)
+  - a project title's temporary transition name is cleared when the page is restored from the back/forward cache

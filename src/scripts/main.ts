@@ -139,7 +139,9 @@ function createCursor() {
   const tick = () => {
     x += (tx - x) * lerp;
     y += (ty - y) * lerp;
-    el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    // The `translate` property, not `transform`: the hover `scale` is applied on top of
+    // `transform`, which would multiply the position and fling the ring across the page.
+    el.style.translate = `${x}px ${y}px`;
     raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.2 ? requestAnimationFrame(tick) : 0;
   };
   addEventListener(
@@ -233,6 +235,12 @@ copyBtn?.addEventListener('click', async () => {
 
 /* View transition home → project: name only the clicked card's title, so the other
    (stacked, partly hidden) titles never float above the page mid-transition. */
+// Back/forward can restore this page from the cache with a title still named; clear
+// it so a later theme toggle doesn't lift that title above the stack.
+addEventListener('pageshow', () => {
+  for (const t of document.querySelectorAll<HTMLElement>('[data-vt]'))
+    t.style.viewTransitionName = '';
+});
 addEventListener('pageswap', (e) => {
   const to = (e as PageSwapEvent).activation?.entry?.url;
   if (!(e as PageSwapEvent).viewTransition || !to) return;

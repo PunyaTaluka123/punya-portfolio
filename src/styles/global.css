@@ -656,6 +656,18 @@ button {
   --k: 2;
 }
 
+.card:nth-child(4) {
+  --k: 3;
+}
+
+.card:nth-child(5) {
+  --k: 4;
+}
+
+.card:nth-child(6) {
+  --k: 5;
+}
+
 .card article {
   container-type: inline-size;
   position: relative;
@@ -1011,6 +1023,18 @@ button {
 
 .vt-3 {
   view-transition-name: project-3;
+}
+
+.vt-4 {
+  view-transition-name: project-4;
+}
+
+.vt-5 {
+  view-transition-name: project-5;
+}
+
+.vt-6 {
+  view-transition-name: project-6;
 }
 
 .spec {

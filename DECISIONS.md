@@ -66,3 +66,12 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 
 ## D14. Hero name size is tied to the indent
 - The second line ("Taluka") is indented, so the type size is chosen per breakpoint (23vw, 19vw, min(17vw, 15rem)) so that indent plus word always fits the viewport. I found this at 768 px, where the name had been clipped.
+
+## D15. No raster images on pages
+- I have no photos or screenshots of the projects, and the rules ban stock illustrations and invented visuals. So the pages use type, the canvas field and CSS, and contain no `<img>`. The only raster files are the Open Graph image (PNG, 1200×630, 60 KB; social crawlers still handle PNG most reliably) and the icon set. If project screenshots are added later, use AVIF or WebP with `width`, `height` and `loading="lazy"` below the fold.
+
+## D16. Lighthouse runs on indexable pages only
+- Gate 6 runs on `/`, the three project pages and `/llm`. `/404` is deliberately `noindex`, so Lighthouse's SEO "is crawlable" audit would always mark it down. That is correct behaviour for a 404 page, not a defect. `/404` is still covered by axe (gate 5), the screenshots (gate 9) and the link check.
+
+## D17. CI uses Node 24 and actions pinned to commit SHAs
+- `verify.mjs` imports `src/data/site.ts` directly through Node's built-in TypeScript type stripping (Node 22.18 and newer), so it never duplicates content. The actions are pinned to full commit SHAs, with the version noted in a comment.

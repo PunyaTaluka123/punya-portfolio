@@ -58,6 +58,7 @@ export function toMarkdown(base: URL): string {
     `- Areas: ${site.skills.areas.join(', ')}`,
     `- ML libraries: ${site.skills.ml.join(', ')}`,
     `- Tools: ${site.skills.tools.join(', ')}`,
+    `- Soft skills: ${site.skills.soft.join(', ')}`,
     `- Spoken languages: ${site.spoken.join(', ')}`,
     '',
     '## Interests',

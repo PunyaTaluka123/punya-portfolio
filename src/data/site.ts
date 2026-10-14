@@ -115,7 +115,12 @@ export const site = {
     {
       org: 'StemCast',
       role: 'Co-founder',
-      points: ['A podcast for STEM outreach.'],
+      points: [
+        'A podcast for STEM outreach.',
+        'We took STEM into government schools: 5 school sessions for 100+ students.',
+        'We put out 5 newsletters and 5 podcast episodes with STEM experts.',
+        'We donated 260 books through HERC and FRC.',
+      ],
     },
     {
       org: 'School coding club, grades 6–8',
@@ -232,6 +237,15 @@ export const site = {
     areas: ['Machine learning', 'Computer vision', 'Web development'],
     ml: ['PyTorch', 'Detectron2', 'scikit-learn', 'XGBoost', 'pandas'],
     tools: ['Git', 'Docker', 'PostgreSQL', 'Kafka', 'Databricks', 'Gemini API', 'n8n'],
+    /** Placeholder list from the owner (2026-10-14); to be replaced with their own. */
+    soft: [
+      'Communication',
+      'Leadership',
+      'Teamwork',
+      'Mentoring',
+      'Problem solving',
+      'Adaptability',
+    ],
   },
 
   spoken: ['English', 'Hindi'],

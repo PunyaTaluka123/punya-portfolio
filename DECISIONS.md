@@ -170,3 +170,19 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
   - opening: it pops out of its role as a thin strip (`transform`), opens left and right (`scale` from the centre), and then its text fades in
   - closing: the same steps backwards
   - mechanism: CSS transitions with `@starting-style` and `allow-discrete` on `display`/`overlay`, with different delays per direction; only transform and opacity animate
+
+## D29. Filling the empty space in the experience orbit (owner request)
+
+- **References:** circular and radial timeline layouts (Awwwards "circular timeline", Framer OrbitMotion, 21st.dev radial orbital timeline), rotating circular text badges, and "radar" rings. They all fill the space with thin-stroke instrument detail, not boxes or images.
+- **Built (one static SVG plus one CSS layer, no extra JS):**
+  - an outer ring with 72 compass ticks
+  - a faint dotted inner ring
+  - orange dashed spokes from the centre to each role, turning with the roles
+  - the organisation names and "2023 — 2026" as mono text on a circle, turning slowly the other way
+  - a dot grid that fades out from the centre (its own layer, so the fade never touches the role boxes)
+- **Fit:** it matches the computer-vision/detection theme and uses only the existing colour tokens. The new rotations use the same `spin`/`counter-spin` animations, so they brake and wobble with the orbit. All of it is off on small screens and in the LLM view.
+
+## D30. StemCast details and soft skills
+
+- StemCast gained the details the owner gave in chat.
+- Skills gained a "Soft skills" group, a placeholder list the owner asked for and plans to replace (`skills.soft` in `site.ts`).

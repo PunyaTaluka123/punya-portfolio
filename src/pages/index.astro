@@ -13,6 +13,24 @@ const [emailUser, emailHost] = site.email.split('@');
 const n = site.experience.length;
 const opensAbove = (i: number) => Math.sin(((i / n) * 360 - 90) * (Math.PI / 180)) > 0.25;
 
+// Background "instrument" for the orbit (SVG, viewBox 0–100, centre 50,50).
+const polar = (r: number, deg: number) => {
+  const a = (deg - 90) * (Math.PI / 180);
+  return [50 + r * Math.cos(a), 50 + r * Math.sin(a)].map((v) => v.toFixed(2));
+};
+const ticks = Array.from({ length: 72 }, (_, i) => {
+  const [x1, y1] = polar(46, i * 5);
+  const [x2, y2] = polar(i % 6 === 0 ? 48.5 : 47.2, i * 5);
+  return { x1, y1, x2, y2, major: i % 6 === 0 };
+});
+const spokes = site.experience.map((_, i) => {
+  const [x1, y1] = polar(21.5, (i / n) * 360);
+  const [x2, y2] = polar(28, (i / n) * 360);
+  return { x1, y1, x2, y2 };
+});
+const ringText =
+  `${site.experience.map((x) => x.org.split(',')[0]).join(' · ')} · 2023 — 2026 · `.toUpperCase();
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -111,6 +129,28 @@ const jsonLd = {
 
   <section id="experience" class="section xp-section" aria-labelledby="xp-h">
     <div class="orbit">
+      <svg class="orbit-deco" viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="deco-ring" cx="50" cy="50" r="46"></circle>
+        <circle class="deco-ring faint" cx="50" cy="50" r="40"></circle>
+        <g class="deco-ticks">
+          {ticks.map((t) => (
+            <line class:list={[{ major: t.major }]} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} />
+          ))}
+        </g>
+        <g class="deco-spokes">
+          {spokes.map((s) => (
+            <line x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} />
+          ))}
+        </g>
+        <g class="deco-text">
+          <path id="orbit-text-path" d="M50,30.5 a19.5,19.5 0 1,1 -0.01,0" fill="none"></path>
+          <text>
+            <textPath href="#orbit-text-path" textLength="121" lengthAdjust="spacing">
+              {ringText}
+            </textPath>
+          </text>
+        </g>
+      </svg>
       <div class="orbit-core sec-head">
         <span class="mono">02</span>
         <h2 id="xp-h">Experience</h2>
@@ -256,6 +296,14 @@ const jsonLd = {
         <h3>Interests</h3>
         <ul class="chip-list">
           {site.interests.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3>Soft skills</h3>
+        <ul class="chip-list">
+          {site.skills.soft.map((s) => (
             <li>{s}</li>
           ))}
         </ul>

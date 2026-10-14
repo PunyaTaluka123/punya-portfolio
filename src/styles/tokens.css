@@ -66,6 +66,7 @@
   --t-llm-h2: 1.375rem;
   --t-llm-h1: 1.75rem;
   --t-orbit-core: clamp(2.25rem, 1rem + 2.5vw, 3.25rem);
+  --t-orbit-ring: 1.25px; /* SVG units: the circle is 100 wide, so this renders ~11px */
 
   /* tracking */
   --tr-hero: -0.05em;
@@ -135,6 +136,7 @@
   --pop-w: 32rem; /* comment box width */
   --tail: 14px;
   --node: 9px;
+  --grid-gap: 22px; /* dot grid behind the orbit, same pitch as the hero field */
   --radius: 2px;
 
   /* motion */

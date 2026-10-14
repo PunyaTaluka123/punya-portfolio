@@ -736,6 +736,10 @@ button {
   transition: translate var(--m-slow) var(--ease-spring);
 }
 
+.orbit-deco {
+  display: none;
+}
+
 /* The comment box */
 .xp-pop {
   width: min(var(--pop-w), calc(100vw - 2 * var(--gutter)));
@@ -851,6 +855,72 @@ button {
     pointer-events: none;
     border: var(--line) dashed var(--c-line);
     border-radius: 50%;
+  }
+
+  /* The orbit's "instrument" background: ticked outer ring, faint inner ring,
+     spokes to each role, the organisations as circular text, a fading dot grid. */
+  .xp-section .orbit {
+    isolation: isolate;
+  }
+
+  /* Own layer, so the fade-out mask never touches the role boxes. */
+  .xp-section .orbit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(
+      var(--c-field) var(--line),
+      transparent calc(var(--line) * 1.5)
+    );
+    background-size: var(--grid-gap) var(--grid-gap);
+    background-position: center;
+    mask-image: radial-gradient(circle closest-side, #000 40%, transparent);
+    pointer-events: none;
+  }
+
+  .orbit-deco {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .orbit-deco :is(circle, line) {
+    fill: none;
+    stroke: var(--c-line);
+    stroke-width: var(--line);
+    vector-effect: non-scaling-stroke;
+  }
+
+  .orbit-deco .faint {
+    stroke-dasharray: 1 5;
+  }
+
+  .orbit-deco .major {
+    stroke: var(--c-muted);
+  }
+
+  .deco-spokes line {
+    stroke: var(--c-accent);
+    stroke-dasharray: 2 3;
+    opacity: 0.6;
+  }
+
+  .deco-text text {
+    fill: var(--c-muted);
+    font-family: var(--f-mono);
+    font-size: var(--t-orbit-ring);
+    letter-spacing: var(--tr-mono);
+  }
+
+  .deco-spokes,
+  .deco-text {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
   }
 
   .orbit-core {
@@ -1671,8 +1741,13 @@ button {
      Everything stops while a role is hovered or focused, or its box is open. */
   @media (min-width: 1000px) {
     :root:not([data-view='llm']) .orbit::before,
-    :root:not([data-view='llm']) .orbit-list {
+    :root:not([data-view='llm']) .orbit-list,
+    :root:not([data-view='llm']) .deco-spokes {
       animation: spin var(--m-orbit) linear infinite;
+    }
+
+    :root:not([data-view='llm']) .deco-text {
+      animation: counter-spin calc(var(--m-orbit) * 1.5) linear infinite;
     }
 
     :root:not([data-view='llm']) .orbit-item {
@@ -1965,6 +2040,8 @@ button {
 /* Separate selectors: pseudo-elements are not allowed inside :is(), and one invalid
    entry silently drops the whole rule. */
 :root[data-view='llm'] :is(.orbit-title, .orbit-core .hint, .pop-close),
+:root[data-view='llm'] .orbit-deco,
+:root[data-view='llm'] .orbit::after,
 :root[data-view='llm'] .orbit::before,
 :root[data-view='llm'] .orbit-item::before,
 :root[data-view='llm'] .xp-pop::before {

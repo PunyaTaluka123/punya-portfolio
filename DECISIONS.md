@@ -42,7 +42,8 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 ## D6. BiogasBoosters wording versus gate 11
 
 - The rules say to "State deployment in 2027, 33% increase". Gate 11 says "BiogasBoosters has no result claims".
-- Today is 2026-10-14, so a 2027 deployment hasn't happened yet. I state both numbers as a **plan and a target**: "Deployment is planned for 2027. The target is a 33% increase in biogas production." That states the facts the rule asks for without claiming a result. The fact audit checks for words like "achieved", "increased" and "resulted".
+- My first version framed 33% as a target. On 2026-10-14 the owner confirmed in chat that **the 33% is already measured**. The site now says: "It has a measured 33% increase in biogas production. Deployment is planned for 2027." The spec list row reads "Result: Measured 33% increase in biogas production".
+- Gate 11 still blocks any other result claim about BiogasBoosters (achieved, increased, improved, resulted, delivered, reduced, grew, saved). It allows the 33% only where it is labelled as measured, which is the one result the owner has confirmed.
 
 ## D7. Extra detail from GitHub
 

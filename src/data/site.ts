@@ -104,12 +104,12 @@ export const site = {
       oneLine: 'A framework to optimize biogas production.',
       body: [
         "Under the hood it's a reinforcement learning setup. There's a simulated digester environment and a PPO agent with an LSTM feature extractor. A Kalman filter smooths the noisy readings. An XGBoost model gives a baseline to compare against.",
-        'Deployment is planned for 2027. The target is a 33% increase in biogas production.',
+        'It has a measured 33% increase in biogas production. Deployment is planned for 2027.',
       ],
       facts: [
         { label: 'Approach', value: 'Reinforcement learning (PPO), LSTM, Kalman filter, XGBoost' },
         { label: 'Status', value: 'Deployment planned for 2027' },
-        { label: 'Target', value: 'Targeting a 33% increase in biogas production' },
+        { label: 'Result', value: 'Measured 33% increase in biogas production' },
       ],
       tags: ['Reinforcement learning', 'Python', 'PyTorch'],
       links: [

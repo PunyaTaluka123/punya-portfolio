@@ -654,8 +654,9 @@ await gate(11, 'Fact audit checks', () => {
         /\b(achieved|increased|improved|resulted|delivered|reduced|grew|saved)\b/i.test(s)
       )
         issues.push(`${f}: BiogasBoosters result claim: "${s}"`);
-      if (/33%/.test(s) && !/target/i.test(s))
-        issues.push(`${f}: 33% not framed as a target: "${s}"`);
+      // The one sourced result: the owner confirmed the 33% is measured (DECISIONS D6).
+      if (/33%/.test(s) && !/measured/i.test(s))
+        issues.push(`${f}: 33% not labelled as the measured result: "${s}"`);
     }
   }
   const derma = read(join(DIST, 'projects/dermatrack.html'));
@@ -664,7 +665,7 @@ await gate(11, 'Fact audit checks', () => {
   if (!existsSync(audit)) issues.push('FACT_AUDIT.md missing');
   else if (/UNSOURCED/.test(read(audit))) issues.push('FACT_AUDIT.md lists unsourced claims');
   fail(issues, 'gate11-facts.txt');
-  return `${files.length} files: no OncoGuard, DermaTrack "designed", Biogas target only`;
+  return `${files.length} files: no OncoGuard, DermaTrack "designed", Biogas: only the measured 33%`;
 });
 
 await gate(12, 'Fresh-eyes review', () => {

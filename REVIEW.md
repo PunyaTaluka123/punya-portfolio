@@ -10,7 +10,7 @@ One subagent with no earlier context reviewed the repo read-only against the ful
 - [x] L1: Copy as Markdown needed to work in Safari. Fixed: `ClipboardItem` with a promise.
 - [x] L2: In the LLM view, the glance h2 came before the page's h1. Fixed: the glance title is no longer a heading, and the section uses `aria-label`.
 - [x] L3: "Most of them are about computer vision" was unsupported. Reworded to "My focus is computer vision".
-- [x] L4: Is the BiogasBoosters 33% a target? Resolved in the copy: the rules require stating 33%, and the site frames it only as a target for the planned 2027 deployment (DECISIONS D6). The final report asks the owner to confirm it.
+- [x] L4: Is the BiogasBoosters 33% a target? The owner answered on 2026-10-14: it is measured. The copy now states it as a measured result, and deployment stays "planned for 2027" (DECISIONS D6).
 - [x] L5: Project pages repeated their one-liner. Removed the duplicate body sentences and "What" rows.
 - [x] Nits fixed:
   - removed the border-colour transition

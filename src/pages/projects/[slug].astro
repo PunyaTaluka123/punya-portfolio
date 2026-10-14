@@ -1,0 +1,85 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import { site, type Project } from '../../data/site';
+
+export const getStaticPaths = (() =>
+  site.projects.map((project, i) => ({
+    params: { slug: project.slug },
+    props: { project, i },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  project: Project;
+  i: number;
+}
+
+const { project, i } = Astro.props;
+const n = site.projects.length;
+const prev = site.projects[(i - 1 + n) % n];
+const next = site.projects[(i + 1) % n];
+const pad = (k: number) => String(k).padStart(2, '0');
+---
+
+<Base title={`${project.name}: ${site.name}`} description={`${project.name}. ${project.oneLine}`}>
+  <article class="project-page" aria-labelledby="project-title">
+    <p class="crumbs mono">
+      <a class="draw" href="/#projects">
+        ← All projects
+      </a>
+      <span>
+        Project {pad(i + 1)} of {pad(n)}
+      </span>
+    </p>
+    <h1 id="project-title" class={`project-title vt-${i + 1}`}>
+      {project.name}
+    </h1>
+    <p class="lead">{project.oneLine}</p>
+    <div class="prose reveal">
+      {project.body.map((para) => (
+        <p>{para}</p>
+      ))}
+      {project.links.length > 0 && (
+        <ul class="project-links">
+          {project.links.map((l) => (
+            <li>
+              <a class="btn" href={l.href} rel="noopener noreferrer">
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+    <div class="spec-wrap">
+      <h2 class="sr-only">Details</h2>
+      <dl class="spec">
+        {project.facts.map((f) => (
+          <div>
+            <dt class="mono">{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <ul class="tags" aria-label="Tags">
+        {project.tags.map((t) => (
+          <li>{t}</li>
+        ))}
+      </ul>
+    </div>
+    <nav class="pager" aria-label="More projects">
+      {prev && (
+        <a href={`/projects/${prev.slug}`} class="prev">
+          <span class="mono">← Previous</span>
+          <span class="name">{prev.name}</span>
+        </a>
+      )}
+      {next && (
+        <a href={`/projects/${next.slug}`} class="next">
+          <span class="mono">Next →</span>
+          <span class="name">{next.name}</span>
+        </a>
+      )}
+    </nav>
+  </article>
+</Base>

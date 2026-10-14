@@ -1,0 +1,177 @@
+---
+import Head from '../components/Head.astro';
+import { site } from '../data/site';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  noindex?: boolean;
+  jsonLd?: object;
+}
+
+const props = Astro.props;
+const home = Astro.url.pathname === '/';
+const sec = (id: string) => (home ? `#${id}` : `/#${id}`);
+const ext = { rel: 'noopener noreferrer' };
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head {...props} />
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
+    <header class="site-header">
+      <a class="mark" href="/">
+        <span class="short" aria-hidden="true">
+          PT
+        </span>
+        <span class="full" aria-hidden="true">
+          {site.name}
+        </span>
+        <span class="sr-only">{site.name}, home</span>
+      </a>
+      <nav class="primary-nav" aria-label="Sections">
+        <ul>
+          <li>
+            <a class="draw" href={sec('about')}>
+              About
+            </a>
+          </li>
+          <li>
+            <a class="draw" href={sec('experience')}>
+              Experience
+            </a>
+          </li>
+          <li>
+            <a class="draw" href={sec('projects')}>
+              Projects
+            </a>
+          </li>
+          <li>
+            <a class="draw" href={sec('contact')}>
+              Contact
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="actions">
+        <a class="draw" href={site.links.github} {...ext}>
+          GitHub
+        </a>
+        <a class="draw" href={site.links.linkedin} {...ext}>
+          LinkedIn
+        </a>
+        <button
+          id="theme-toggle"
+          class="icon-btn"
+          type="button"
+          aria-pressed="false"
+          aria-label="Dark theme"
+        >
+          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="4.5" stroke-width="2"></circle>
+            <path
+              stroke-width="2"
+              stroke-linecap="round"
+              d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"
+            ></path>
+          </svg>
+          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+            <path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1Z"></path>
+          </svg>
+        </button>
+        <button id="view-toggle" class="view-btn" type="button" aria-pressed="false">
+          <span class="when-human">LLM view</span>
+          <span class="when-llm">Human view</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section id="glance" class="glance" hidden aria-labelledby="glance-title">
+        <h2 id="glance-title">At a glance</h2>
+        <dl>
+          <div>
+            <dt>Name</dt>
+            <dd>{site.name}</dd>
+          </div>
+          <div>
+            <dt>Role</dt>
+            <dd>{site.roleLine}</dd>
+          </div>
+          <div>
+            <dt>School</dt>
+            <dd>
+              {site.education[0]?.school}, {site.education[0]?.detail}
+            </dd>
+          </div>
+          <div>
+            <dt>Links</dt>
+            <dd>
+              <a href={site.links.github} {...ext}>
+                GitHub: {site.links.github}
+              </a>
+              <br />
+              <a href={site.links.linkedin} {...ext}>
+                LinkedIn: {site.links.linkedin}
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>Featured projects</dt>
+            <dd>
+              <ul>
+                {site.projects.map((p) => (
+                  <li>
+                    <a href={`/projects/${p.slug}`}>{p.name}</a>: {p.oneLine}
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>Contact</dt>
+            <dd>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </dd>
+          </div>
+        </dl>
+        <div class="glance-actions">
+          <button id="copy-md" type="button">
+            Copy as Markdown
+          </button>
+          <a href="/portfolio.md">Open /portfolio.md</a>
+        </div>
+        <p id="copy-status" role="status"></p>
+      </section>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 {site.name}</p>
+      <ul>
+        <li>
+          <a href="/llm">Machine-readable version</a>
+        </li>
+        <li>
+          <a href="/llms.txt">llms.txt</a>
+        </li>
+        <li>
+          <a href="/portfolio.md">portfolio.md</a>
+        </li>
+        <li>
+          <a href="/content.json">content.json</a>
+        </li>
+      </ul>
+    </footer>
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
+</html>

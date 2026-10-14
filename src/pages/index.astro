@@ -1,0 +1,240 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+
+const words = site.name.split(' ');
+const total = String(site.projects.length).padStart(2, '0');
+const pad = (n: number) => String(n).padStart(2, '0');
+const ext = { rel: 'noopener noreferrer' };
+const [ntu, ib] = site.education;
+const [emailUser, emailHost] = site.email.split('@');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.jobTitle,
+  description: site.roleLine,
+  alumniOf: { '@type': 'CollegeOrUniversity', name: site.schoolFull },
+  url: Astro.site?.href,
+  email: `mailto:${site.email}`,
+  sameAs: [site.links.github, site.links.linkedin],
+  knowsAbout: site.interests,
+};
+---
+
+<Base title={`${site.name}: Data Science and AI student, computer vision`} jsonLd={jsonLd}>
+  <section class="hero" aria-labelledby="hero-name">
+    <canvas class="field" aria-hidden="true"></canvas>
+    <p class="rail rail-top mono">
+      <span>Data Science + AI</span>
+      <span>{site.school}</span>
+      <span>{ntu?.when}</span>
+    </p>
+    <h1 id="hero-name" class="hero-name">
+      <span class="sr-only">{site.name}</span>
+      {words.map((word) => (
+        <span class="word" aria-hidden="true">
+          {[...word].map((ch) => (
+            <span class="ch">{ch}</span>
+          ))}
+        </span>
+      ))}
+    </h1>
+    <div class="hero-meta">
+      <p class="role">{site.roleLine}</p>
+      <p class="cta">
+        <a class="btn btn-solid" href="#projects">
+          See the projects
+        </a>
+        <a class="btn" href={`mailto:${site.email}`}>
+          Email me
+        </a>
+      </p>
+    </div>
+    <p class="rail rail-bottom mono">
+      <span>Computer vision / ML systems</span>
+      <span>Scroll ↓</span>
+    </p>
+  </section>
+
+  <section id="about" class="section" aria-labelledby="about-h">
+    <div class="sec-head">
+      <span class="mono">01</span>
+      <h2 id="about-h">About</h2>
+    </div>
+    <div class="sec-body about-body">
+      <p class="lead">{site.about[1]}</p>
+      <div class="about-grid">
+        <div class="prose reveal">
+          <p>{site.about[0]}</p>
+          <p>{site.about[2]}</p>
+        </div>
+        <dl class="facts reveal">
+          <div>
+            <dt class="mono">Education</dt>
+            <dd>
+              <strong>{ntu?.school}</strong>
+            </dd>
+            <dd>
+              {ntu?.detail}. {ntu?.when}.
+            </dd>
+            <dd>
+              <strong>{ib?.school}</strong>, {ib?.when}
+            </dd>
+            <dd>{ib?.detail}</dd>
+          </div>
+          <div>
+            <dt class="mono">Recognition</dt>
+            {site.recognition.map((r) => (
+              <dd>{r}</dd>
+            ))}
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="section" aria-labelledby="xp-h">
+    <div class="sec-head">
+      <span class="mono">02</span>
+      <h2 id="xp-h">Experience</h2>
+    </div>
+    <ol class="sec-body xp reveal">
+      {site.experience.map((x) => (
+        <li class="xp-row">
+          <p class="when mono">{x.when}</p>
+          <div>
+            <h3>
+              {x.role} <span class="org">· {x.org}</span>
+            </h3>
+            <ul>
+              {x.points.map((pt) => (
+                <li>{pt}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section id="projects" class="section projects" aria-labelledby="projects-h">
+    <div class="sec-head">
+      <span class="mono">03</span>
+      <h2 id="projects-h">Projects</h2>
+    </div>
+    <div class="progress mono" aria-hidden="true">
+      <span class="track">
+        <span class="fill"></span>
+      </span>
+      <ol>
+        {site.projects.map((_, i) => (
+          <li>{pad(i + 1)}</li>
+        ))}
+      </ol>
+    </div>
+    <div class="sec-body">
+      <ol class="stack">
+        {site.projects.map((p, i) => (
+          <li class="card">
+            <article aria-labelledby={`card-${p.slug}`}>
+              <span class="bracket b-tl" aria-hidden="true" />
+              <span class="bracket b-tr" aria-hidden="true" />
+              <span class="bracket b-bl" aria-hidden="true" />
+              <span class="bracket b-br" aria-hidden="true" />
+              <span class="det mono" aria-hidden="true">
+                {pad(i + 1)} · {p.tags[0]}
+              </span>
+              <p class="card-top mono">
+                <span>
+                  {pad(i + 1)} / {total}
+                </span>
+                <span>{p.tags.join(' · ')}</span>
+              </p>
+              <h3 class={`card-title vt-${i + 1}`} id={`card-${p.slug}`}>
+                <a href={`/projects/${p.slug}`}>{p.name}</a>
+              </h3>
+              <div class="card-foot">
+                <p>{p.oneLine}</p>
+                <span class="more mono" aria-hidden="true">
+                  Read more →
+                </span>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <p class="others">
+      Also:{' '}
+      {site.otherProjects.map((name, i) => (
+        <>
+          <strong>{name}</strong>
+          {i < site.otherProjects.length - 1 ? ', ' : '.'}
+        </>
+      ))}
+    </p>
+  </section>
+
+  <section id="skills" class="section" aria-labelledby="skills-h">
+    <div class="sec-head">
+      <span class="mono">04</span>
+      <h2 id="skills-h">Skills</h2>
+    </div>
+    <div class="sec-body skills reveal">
+      <div>
+        <h3>Languages</h3>
+        <ul class="big-list">
+          {site.skills.languages.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3>Areas</h3>
+        <ul class="mid-list">
+          {site.skills.areas.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3>Interests</h3>
+        <ul class="chip-list">
+          {site.interests.map((s) => (
+            <li>{s}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section" aria-labelledby="contact-h">
+    <div class="sec-head">
+      <span class="mono">05</span>
+      <h2 id="contact-h">Contact</h2>
+    </div>
+    <div class="sec-body prose reveal">
+      <p class="lead">Want to talk ML, computer vision or a project? Send me an email.</p>
+      <p>
+        <a class="contact-email" href={`mailto:${site.email}`}>
+          {emailUser}
+          <wbr />@{emailHost}
+        </a>
+      </p>
+      <ul class="contact-links">
+        <li>
+          <a href={site.links.github} {...ext}>
+            GitHub: {site.handles.github}
+          </a>
+        </li>
+        <li>
+          <a href={site.links.linkedin} {...ext}>
+            LinkedIn: {site.handles.linkedin}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,138 @@
+---
+// Plain, script-free, style-free version of the whole site for machines and text browsers.
+import Head from '../components/Head.astro';
+import { site } from '../data/site';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head
+      title={`${site.name}: machine-readable version`}
+      description={`Plain text version of ${site.name}'s portfolio. ${site.roleLine}`}
+      scripts={false}
+    />
+  </head>
+  <body>
+    <header>
+      <p>
+        <a href="/">Back to the full site</a>
+      </p>
+    </header>
+    <main>
+      <h1>{site.name}</h1>
+      <p>{site.roleLine}</p>
+      <ul>
+        <li>
+          Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+        </li>
+        <li>
+          GitHub:{' '}
+          <a href={site.links.github} rel="noopener noreferrer">
+            {site.links.github}
+          </a>
+        </li>
+        <li>
+          LinkedIn:{' '}
+          <a href={site.links.linkedin} rel="noopener noreferrer">
+            {site.links.linkedin}
+          </a>
+        </li>
+      </ul>
+
+      <h2>About</h2>
+      {site.about.map((p) => (
+        <p>{p}</p>
+      ))}
+
+      <h2>Education</h2>
+      <ul>
+        {site.education.map((e) => (
+          <li>
+            {e.school}: {e.detail} ({e.when})
+          </li>
+        ))}
+      </ul>
+
+      <h2>Experience</h2>
+      {site.experience.map((x) => (
+        <>
+          <h3>
+            {x.role}, {x.org}
+            {x.when && ` (${x.when})`}
+          </h3>
+          <ul>
+            {x.points.map((pt) => (
+              <li>{pt}</li>
+            ))}
+          </ul>
+        </>
+      ))}
+
+      <h2>Featured projects</h2>
+      {site.projects.map((p) => (
+        <>
+          <h3>
+            <a href={`/projects/${p.slug}`}>{p.name}</a>
+          </h3>
+          {p.body.map((para) => (
+            <p>{para}</p>
+          ))}
+          <ul>
+            {p.facts.map((f) => (
+              <li>
+                {f.label}: {f.value}
+              </li>
+            ))}
+            {p.links.map((l) => (
+              <li>
+                {l.label}:{' '}
+                <a href={l.href} rel="noopener noreferrer">
+                  {l.href}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      ))}
+
+      <h2>Other projects</h2>
+      <ul>
+        {site.otherProjects.map((name) => (
+          <li>{name}</li>
+        ))}
+      </ul>
+
+      <h2>Recognition</h2>
+      <ul>
+        {site.recognition.map((r) => (
+          <li>{r}</li>
+        ))}
+      </ul>
+
+      <h2>Skills</h2>
+      <ul>
+        <li>Languages: {site.skills.languages.join(', ')}</li>
+        <li>Areas: {site.skills.areas.join(', ')}</li>
+      </ul>
+
+      <h2>Interests</h2>
+      <ul>
+        {site.interests.map((i) => (
+          <li>{i}</li>
+        ))}
+      </ul>
+
+      <h2>Contact</h2>
+      <p>
+        Email <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </main>
+    <footer>
+      <p>
+        Also available as <a href="/portfolio.md">Markdown</a>, <a href="/content.json">JSON</a> and
+        <a href="/llms.txt">llms.txt</a>.
+      </p>
+    </footer>
+  </body>
+</html>

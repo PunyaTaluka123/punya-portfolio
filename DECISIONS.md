@@ -54,3 +54,15 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 
 ## D10. No "Learn by Doing" pauses
 - The session style asks for user code contributions. The brief says "Work alone. Do not ask me questions", so I did not stop for contributions.
+
+## D11. Fonts use `font-display: optional` with preload
+- Both woff2 files (41 KB and 30 KB, Latin subset only) are preloaded. With `optional`, a slow first visit keeps the fallback font and never swaps mid-read. That keeps layout shift near zero (the gate needs CLS under 0.05). Repeat visits get the real font from cache.
+
+## D12. CSS minifier is esbuild
+- Vite's default CSS minifier folded `animation-timeline` into the `animation` shorthand. Browsers reject that, so every scroll-driven animation silently turned off. esbuild keeps the longhand. Found while debugging the progress marker.
+
+## D13. Scroll reveals move, they don't fade
+- Section reveals animate only `transform`: headings rise out of a clip mask, and rows slide up 2.5 rem. Opacity is never used for scroll reveals. A half-faded element would fail colour contrast in axe and Lighthouse wherever it sits at the edge of the viewport. Content also never depends on JS: without scroll-timeline support, everything is simply static.
+
+## D14. Hero name size is tied to the indent
+- The second line ("Taluka") is indented, so the type size is chosen per breakpoint (23vw, 19vw, min(17vw, 15rem)) so that indent plus word always fits the viewport. I found this at 768 px, where the name had been clipped.

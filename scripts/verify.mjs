@@ -459,7 +459,7 @@ await gate(9, 'Visual review screenshots', async () => {
 
 await gate(10, 'LLM view test', async () => {
   const issues = [];
-  const pg = await page();
+  const pg = await page({ permissions: ['clipboard-read', 'clipboard-write'] });
   await pg.goto(`${BASE}/`, { waitUntil: 'networkidle' });
   const btn = pg.getByRole('button', { name: 'LLM view' });
   if ((await btn.getAttribute('aria-pressed')) !== 'false')
@@ -475,10 +475,18 @@ await gate(10, 'LLM view test', async () => {
   if (state.view !== 'llm') issues.push('data-view="llm" not set');
   if (state.pressed !== 'true' || state.label !== 'Human view')
     issues.push(`button state wrong: ${JSON.stringify(state)}`);
+  if ((await pg.getByRole('button', { name: 'Human view', exact: true }).count()) !== 1)
+    issues.push('no button with accessible name "Human view"');
   if (state.glanceHidden || !(await pg.isVisible('#glance'))) issues.push('#glance not visible');
   const running = await runningAnimations(pg);
   if (running) issues.push(`${running} animations running in LLM view`);
   if (!(await canvasStill(pg))) issues.push('background canvas still moving in LLM view');
+  await pg.getByRole('button', { name: 'Copy as Markdown' }).click();
+  await pg.waitForTimeout(300);
+  const copied = await pg.evaluate(() => navigator.clipboard.readText());
+  if (copied !== (await (await fetch(`${BASE}/portfolio.md`)).text()))
+    issues.push('Copy as Markdown did not copy /portfolio.md');
+  await pg.evaluate(() => (document.getElementById('copy-status').textContent = ''));
   const text = await pg.evaluate(() => document.body.innerText);
   writeFileSync(join(REPORTS, 'llm-view.txt'), text);
   const facts = [

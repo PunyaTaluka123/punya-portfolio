@@ -15,6 +15,10 @@ Read this first if context was summarized.
 - scripts/verify.mjs: 12 gates; local server mirrors vercel.json headers + cleanUrls + gzip.
 - Gate runs so far: 1-8 PASS (axe 48 runs 0 serious; Lighthouse 100x4 on all indexable pages, LCP 1.35 s, CLS 0, JS 2.3 KB gz).
 
-## Phase 4: LLM mode — mostly built (toggle, #glance, copy md, boot.js ?view=llm)
+## Phase 4: LLM mode — DONE
+- Toggle (aria-pressed, label swap), data-view on <html>, #glance hidden in human mode, Copy as Markdown (clipboard verified), /portfolio.md link.
+- boot.js applies ?view=llm / localStorage before paint; view transitions skipped in LLM mode.
+- /llm, /llms.txt, /portfolio.md, /content.json, JSON-LD Person, robots.txt (GPTBot, ClaudeBot, PerplexityBot, Google-Extended), sitemap.xml, OG/Twitter meta, og.png.
+- Gate 10 PASS; LLM_TEST.md written from extracted text.
 ## Phase 5: Production — open
 ## Gates — open (scripts/verify.mjs not written yet)

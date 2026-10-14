@@ -1347,6 +1347,7 @@ button {
   animation: none !important;
   transition: none !important;
   scroll-behavior: auto !important;
+  text-transform: none !important;
 }
 
 :root[data-view='llm'] #glance[hidden] {
@@ -1365,7 +1366,8 @@ button {
   padding-inline: var(--s-4);
 }
 
-:root[data-view='llm'] :is(.field, .rail, .bracket, .det, .progress, .cursor, .hero-name .word) {
+:root[data-view='llm']
+  :is(.field, .rail, .bracket, .det, .progress, .cursor, .more, .sec-head .mono, .hero-name .word) {
   display: none !important;
 }
 

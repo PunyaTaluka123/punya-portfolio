@@ -1170,7 +1170,7 @@ button {
 
 @keyframes rise {
   from {
-    transform: translateY(108%);
+    transform: translateY(130%);
   }
 }
 
@@ -1211,12 +1211,12 @@ button {
   }
 
   :root:not([data-view='llm']) .hero-name .ch {
-    animation: rise var(--m-slow) var(--ease-out) both;
+    animation: rise var(--m-slow) var(--ease-out) backwards;
     animation-delay: calc(80ms + (var(--o, 0) + var(--i, 0)) * var(--m-stagger));
   }
 
   :root:not([data-view='llm']) .rail {
-    animation: slide-in var(--m-slow) var(--ease-out) 450ms both;
+    animation: slide-in var(--m-slow) var(--ease-out) 450ms backwards;
   }
 
   @supports (animation-timeline: view()) {
@@ -1225,7 +1225,7 @@ button {
     }
 
     :root:not([data-view='llm']) .reveal > * {
-      animation: reveal linear both;
+      animation: reveal linear backwards;
       animation-timeline: --reveal;
       animation-range: entry calc(var(--r, 0) * 7%) entry calc(55% + var(--r, 0) * 7%);
     }
@@ -1247,7 +1247,7 @@ button {
     }
 
     :root:not([data-view='llm']) .sec-head > * {
-      animation: mask-up linear both;
+      animation: mask-up linear backwards;
       animation-timeline: view();
       animation-range: entry 0% entry 100%;
     }

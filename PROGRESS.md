@@ -10,9 +10,10 @@ Read this first if context was summarized.
 - Motion: CSS letter stagger hero, canvas kernel field (main.ts), scroll-driven reveals + sticky stack progress, card lift + detection brackets, draw-in underlines, cursor follower, native cross-document view transitions, theme crossfade via startViewTransition.
 - Reviewed at 375/768/1024/1440 light+dark; fixes logged as D11–D14.
 
-## Phase 3: Build — in progress
+## Phase 3: Build — DONE
 - Astro 7 static, build.format=file, trailingSlash never. Pages: /, /projects/[slug] x3, /404, /llm. Endpoints: llms.txt, portfolio.md, content.json, robots.txt, sitemap.xml, site.webmanifest.
-- astro check / eslint / prettier: clean.
+- scripts/verify.mjs: 12 gates; local server mirrors vercel.json headers + cleanUrls + gzip.
+- Gate runs so far: 1-8 PASS (axe 48 runs 0 serious; Lighthouse 100x4 on all indexable pages, LCP 1.35 s, CLS 0, JS 2.3 KB gz).
 
 ## Phase 4: LLM mode — mostly built (toggle, #glance, copy md, boot.js ?view=llm)
 ## Phase 5: Production — open

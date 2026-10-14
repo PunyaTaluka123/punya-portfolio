@@ -17,14 +17,14 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 
 ## D2. Palette: warm paper and ink, one accent ("signal orange")
 
-- Light: paper `#F3F0E8`, ink `#141311`, accent `#C2410C`.
+- Light: paper `#F3F0E8`, ink `#141311`, accent `#B23A0A`. I darkened it from `#C2410C` so accent text reaches 4.5:1 on the card surface too.
 - Dark: `#121110` / `#F3F0E8`, accent `#FF7A45`.
 - Why: it avoids the purple-to-blue look and neon-on-black. Orange recalls detection-box overlays, and one accent carries the whole page (the lesson from Rauno).
 - I checked contrast for text pairs at 4.5:1 or more (see `tokens.css` comments and the axe gate).
 
 ## D3. Fonts
 
-- Display: **Bricolage Grotesque** (variable, OFL), with its optical-size axis at full display size. Body: **Instrument Sans** (variable, OFL). Both are self-hosted from the `@fontsource-variable` npm packages, which the build bundles into `/_astro/`. Only the Latin subset is preloaded.
+- Display: **Bricolage Grotesque** (variable weight axis only, OFL). Body: **Instrument Sans** (variable weight, OFL). I copied the Latin-subset woff2 files once from the `@fontsource-variable` packages into `src/assets/fonts/`, with their licences. The packages are no longer dependencies. The build hashes the files into `/_astro/`, and both are preloaded. I used the weight-only file (41 KB) instead of the optical-size one (77 KB) to keep the page light.
 - Metadata labels use the system monospace stack (`ui-monospace`, SF Mono, Menlo, Consolas). That is a fallback stack, not a third downloaded font.
 - Why: they are not Inter, Roboto or Arial. Bricolage has character at 10 rem, and Instrument Sans stays easy to read at 1 rem.
 
@@ -36,7 +36,7 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 
 ## D5. Pre-paint script is external, not inline
 
-- Theme and view (human or LLM) must be applied before first paint, so there is no flash. I use one tiny render-blocking external script, `/boot.js`, so the CSP can be `script-src 'self'` with no `'unsafe-inline'` and no hashes to keep in sync.
+- Theme and view (human or LLM) must be applied before first paint, so there is no flash. I use one tiny render-blocking external script, `src/scripts/boot.js`, so the CSP can be `script-src 'self'` with no `'unsafe-inline'` and no hashes to keep in sync. It is imported with `?url`, so it ships as a hashed `/_astro/boot.*.js` file under the long immutable cache. It costs no revalidation round trip before first paint.
 - Cost: one extra request. It is fetched in parallel with the CSS, so it adds almost no latency.
 
 ## D6. BiogasBoosters wording versus gate 11

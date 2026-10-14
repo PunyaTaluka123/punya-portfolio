@@ -99,7 +99,7 @@ src/styles/global.css     layout, motion, LLM view
 src/layouts/Base.astro    head, header, #glance, footer
 src/components/Head.astro meta, OG, alternate links, preloads
 src/scripts/main.ts       theme and view toggles, canvas field, cursor, copy
-public/boot.js            pre-paint theme/view (no flash, CSP-safe)
+src/scripts/boot.js       pre-paint theme/view (no flash, CSP-safe), hashed by the build
 src/pages/                pages and machine-readable endpoints
 scripts/verify.mjs        the gates
 scripts/assets.mjs        OG image and icons

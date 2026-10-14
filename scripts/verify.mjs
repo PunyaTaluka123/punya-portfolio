@@ -1,7 +1,8 @@
 // npm run verify: runs every gate in order and prints one PASS/FAIL line per gate.
 // Details for failures and artefacts go to reports/ and screenshots/.
 // Run a subset while working: npm run verify -- 5 6
-import { spawnSync } from 'node:child_process';
+import { execFile, spawnSync } from 'node:child_process';
+import { promisify } from 'node:util';
 import { createServer } from 'node:http';
 import {
   existsSync,
@@ -40,7 +41,13 @@ async function gate(id, name, fn) {
   for (const f of readdirSync(REPORTS)) if (f.startsWith(`gate${id}-`)) rmSync(join(REPORTS, f));
   try {
     if (id >= 5 && id <= 10 && serverError) throw serverError;
-    const note = await fn();
+    let timer;
+    const note = await Promise.race([
+      fn(),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error('timed out (hung?)')), GATE_TIMEOUT);
+      }),
+    ]).finally(() => clearTimeout(timer));
     results.push({ id, name, ok: true });
     console.log(`PASS  ${id}. ${name}${note ? ` (${note})` : ''}`);
   } catch (e) {
@@ -56,7 +63,11 @@ const fail = (issues, file) => {
   writeFileSync(join(REPORTS, file), issues.join('\n') + '\n');
   throw new Error(`${issues.length} issue(s), first: ${issues[0]} (see reports/${file})`);
 };
+// Sync is fine before the server starts (gates 1-2). Once the in-process server is up,
+// a sync child would freeze the event loop and the server could never answer it.
 const run = (cmd, args) => spawnSync(cmd, args, { cwd: ROOT, encoding: 'utf8' });
+const runAsync = promisify(execFile);
+const GATE_TIMEOUT = 20 * 60 * 1000;
 const walk = (dir) =>
   readdirSync(dir).flatMap((f) => {
     const p = join(dir, f);
@@ -351,10 +362,14 @@ await gate(6, 'Lighthouse (mobile, throttled)', async () => {
   return `${summary[0]}; home JS ${(jsGz / 1024).toFixed(1)} KB gz`;
 });
 
-await gate(7, 'No-JavaScript fetch (curl)', () => {
-  const c = run('curl', ['-s', '--compressed', `${BASE}/`]);
-  must(c.status === 0, 'curl failed');
-  const html = c.stdout;
+await gate(7, 'No-JavaScript fetch (curl)', async () => {
+  const { stdout: html } = await runAsync('curl', [
+    '-sf',
+    '--compressed',
+    '--max-time',
+    '20',
+    `${BASE}/`,
+  ]);
   const need = [
     site.name,
     ...site.projects.map((p) => p.name),

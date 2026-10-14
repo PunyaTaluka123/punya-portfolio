@@ -29,8 +29,7 @@ Read this first if context was summarized.
 
 - vercel.json headers + cache, CI workflow (.github/workflows/verify.yml), README, npm audit 0, exact pins + lockfile.
 
-## Gates
+## Gates — ALL 12 PASS (full `npm run verify`, exit 0)
 
-- 1-11: PASS individually (axe 48 runs; Lighthouse 100x4 on 5 pages, LCP ~1.35 s; motion; 96 screenshots, 3 review rounds in VISUAL_REVIEW.md; LLM_TEST.md; FACT_AUDIT.md).
-- 12: fresh-eyes review DONE; fixes applied (see REVIEW.md). Gates 1-4 re-run PASS after fixes.
-- OPEN (usage limit hit): full `npm run verify` re-run (gates 5-12) after review fixes; update FACT_AUDIT.md for reworded lines; fix DECISIONS D2/D3/D5 doc errors; README boot.js path (now src/scripts/boot.js); final report.
+- Gate 7 used to deadlock (sync curl against the in-process server); fixed with async execFile and per-gate timeouts.
+- Open for the owner only: confirm that the BiogasBoosters 33% is a target.

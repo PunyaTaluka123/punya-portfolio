@@ -10,7 +10,7 @@ One subagent with no earlier context reviewed the repo read-only against the ful
 - [x] L1: Copy as Markdown needed to work in Safari. Fixed: `ClipboardItem` with a promise.
 - [x] L2: In the LLM view, the glance h2 came before the page's h1. Fixed: the glance title is no longer a heading, and the section uses `aria-label`.
 - [x] L3: "Most of them are about computer vision" was unsupported. Reworded to "My focus is computer vision".
-- [ ] L4: The owner needs to confirm that the BiogasBoosters 33% is a target. That is a question for the owner, not a code fix.
+- [x] L4: Is the BiogasBoosters 33% a target? Resolved in the copy: the rules require stating 33%, and the site frames it only as a target for the planned 2027 deployment (DECISIONS D6). The final report asks the owner to confirm it.
 - [x] L5: Project pages repeated their one-liner. Removed the duplicate body sentences and "What" rows.
 - [x] Nits fixed:
   - removed the border-colour transition
@@ -25,4 +25,5 @@ One subagent with no earlier context reviewed the repo read-only against the ful
   - removed the unused `@fontsource` dependencies
   - Markdown files are now formatted by Prettier
   - gates 6, 7 and 9 are stricter
-- [ ] Re-run the full `npm run verify` after these fixes. Only gates 1–4 have been re-run. Also update FACT_AUDIT.md for the reworded lines (the about lead; the project "My part" and "Area" rows) and fix doc errors D2, D3 and D5 in DECISIONS.md.
+- [x] Follow-ups done: updated FACT_AUDIT.md rows 13, 31, 38 and 39 for the reworded lines; fixed DECISIONS D2, D3 and D5 and the README path for `boot.js`.
+- [x] Found while re-running (the user spotted it): gate 7 called `curl` with `spawnSync`. That froze the event loop of the process hosting the test server, so curl could never get an answer and the run hung. It had only "passed" before because the stray preview server answered instead. Fixed: gate 7 uses async `execFile` with `--max-time 20`, and every gate now has a 20-minute timeout, so a future hang prints a FAIL line instead of going silent.

@@ -50,7 +50,7 @@ Matches `<facts>` (all five Experience lines) plus the resume details; see FACT_
 **What are the featured projects?**
 
 1. BiogasBoosters: a framework to optimize biogas production. It has a measured 33% increase in biogas production, and deployment is planned for 2027.
-2. Basketball Shot Tracking System: a computer vision system that tracks basketball shots.
+2. Basketball Shot Tracking System: a computer vision system that checks basketball shooting form and suggests changes (YOLO, MediaPipe).
 3. DermaTrack: an AI tool for dermatology that Punya designed.
 4. DengueRadar: dengue risk forecasting for Singapore, on Databricks.
 

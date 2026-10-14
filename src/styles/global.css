@@ -845,6 +845,9 @@ button {
     top: calc(50% + sin(var(--a)) * var(--orbit-r));
     width: var(--orbit-chip);
     transform: translate(-50%, -50%);
+    /* Pivot on the box's centre (after the -50% shift) so the counter-rotation
+       keeps each box upright in place. */
+    transform-origin: 0 0;
   }
 
   .orbit-item::before {
@@ -1623,11 +1626,17 @@ button {
     }
   }
 
-  /* Experience orbit: roles fly out from the centre as the section enters,
-     the dashed ring turns slowly, comment boxes pop in. */
+  /* Experience orbit: the roles fly out from the centre as the section enters,
+     then slowly circle it. Each box counter-rotates so its text stays upright.
+     Everything stops while a role is hovered or focused, or its box is open. */
   @media (min-width: 1000px) {
-    :root:not([data-view='llm']) .orbit::before {
+    :root:not([data-view='llm']) .orbit::before,
+    :root:not([data-view='llm']) .orbit-list {
       animation: spin var(--m-orbit) linear infinite;
+    }
+
+    :root:not([data-view='llm']) .orbit-item {
+      animation: counter-spin var(--m-orbit) linear infinite;
     }
 
     @supports (animation-timeline: view()) {
@@ -1636,10 +1645,22 @@ button {
       }
 
       :root:not([data-view='llm']) .orbit-item {
-        animation: orbit-in linear backwards;
-        animation-timeline: --orbit;
-        animation-range: entry calc(10% + var(--k) * 5%) cover calc(35% + var(--k) * 4%);
+        animation:
+          orbit-in linear backwards,
+          counter-spin var(--m-orbit) linear infinite;
+        animation-timeline: --orbit, auto;
+        animation-range:
+          entry calc(10% + var(--k) * 5%) cover calc(35% + var(--k) * 4%),
+          normal;
       }
+    }
+
+    :root:not([data-view='llm'])
+      .orbit:has(.orbit-title:hover, .orbit-title:focus-visible, :popover-open)
+      :is(.orbit-list, .orbit-item),
+    :root:not([data-view='llm'])
+      .orbit:has(.orbit-title:hover, .orbit-title:focus-visible, :popover-open)::before {
+      animation-play-state: paused;
     }
   }
 
@@ -1666,6 +1687,12 @@ button {
 @keyframes spin {
   to {
     rotate: 360deg;
+  }
+}
+
+@keyframes counter-spin {
+  to {
+    rotate: -360deg;
   }
 }
 

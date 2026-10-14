@@ -209,6 +209,20 @@ viewBtn?.addEventListener('click', () => {
 });
 reduced.addEventListener('change', syncView);
 
+/* Experience orbit: roles move, so pick the comment box's side when it opens. */
+for (const pop of document.querySelectorAll<HTMLElement>('.xp-pop')) {
+  pop.addEventListener('beforetoggle', (e) => {
+    const item = pop.closest('.orbit-item');
+    const orbit = pop.closest('.orbit');
+    if ((e as ToggleEvent).newState !== 'open' || !item || !orbit) return;
+    const r = item.getBoundingClientRect();
+    const o = orbit.getBoundingClientRect();
+    const below = r.top + r.height / 2 > o.top + o.height * 0.6;
+    item.classList.toggle('opens-above', below);
+    item.classList.toggle('opens-below', !below);
+  });
+}
+
 /* Copy as Markdown */
 const copyBtn = document.getElementById('copy-md');
 const copyStatus = document.getElementById('copy-status');

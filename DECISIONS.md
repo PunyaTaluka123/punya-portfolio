@@ -130,3 +130,18 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
   - back/forward navigation skips the transition (it should feel instant)
   - link navigations use a short "fade out, then fade in" (a view-transition type)
   - a project title's temporary transition name is cleared when the page is restored from the back/forward cache
+
+## D23. The experience orbit moves (owner request, 2026-10-14)
+
+- **How it moves:** at 1000 px and wider the ring of roles turns slowly (one lap per 120 s, the `--m-orbit` token). Each role counter-rotates, so its text stays upright. Both are `rotate` animations, so they run on the compositor and never trigger layout.
+- **When it stops:**
+  - while any role is hovered or keyboard-focused, or its comment box is open
+  - with reduced motion
+  - in the LLM view
+- **Accessibility:** moving content over 5 seconds needs a way to pause it (WCAG 2.2.2). Hover and focus pause it, and the reduced-motion setting turns it off.
+- **Comment box side:** it picks above or below from where the role is on the ring when it opens (`beforetoggle` in `main.ts`), because roles no longer sit at fixed angles.
+- **Selector guard:** a pseudo-element inside `:is()` silently invalidates the whole rule. I hit that twice, so gate 1 now fails on it.
+
+## D24. "My part" rows removed (owner request)
+
+- The project detail lists no longer have a "My part" row. DermaTrack still says "designed" in its one-liner and on its page.

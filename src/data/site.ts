@@ -157,20 +157,22 @@ export const site = {
     {
       slug: 'basketball-shot-tracking',
       name: 'Basketball Shot Tracking System',
-      oneLine: 'A computer vision system that tracks basketball shots.',
+      oneLine:
+        'A computer vision system that checks basketball shooting form and suggests changes.',
       body: [
+        'It watches someone take a shot, reads the form of their throw, and suggests changes to it.',
+        'It uses YOLO for detection and MediaPipe for body pose tracking.',
         'I built it for my IB Computer Science internal assessment. The IA is a solo software project made for a real client and marked on planning, design, development and evaluation, so I took it from idea to working system on my own.',
-        'Shot tracking is a hard computer vision problem. The ball is small and fast, it blurs, and it has to be picked out from players, the hoop and a busy background.',
       ],
       facts: [
-        { label: 'Area', value: 'Computer vision' },
+        { label: 'Area', value: 'Computer vision, pose estimation' },
+        { label: 'Models', value: 'YOLO, MediaPipe' },
         {
           label: 'Context',
           value: 'IB Computer Science internal assessment (solo, for a real client)',
         },
-        { label: 'My part', value: 'Built it, start to finish' },
       ],
-      tags: ['Computer vision'],
+      tags: ['Computer vision', 'YOLO', 'MediaPipe'],
       links: [],
     },
     {
@@ -185,7 +187,6 @@ export const site = {
       ],
       facts: [
         { label: 'Years', value: '2023 – 2025' },
-        { label: 'My part', value: 'Designed it' },
         { label: 'Models', value: 'ResNet50, YOLOv8, Mask R-CNN, MobileNet-V3, Detectron2' },
         { label: 'Data', value: 'HAM10000, plus 927 images I annotated' },
       ],

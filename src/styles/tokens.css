@@ -147,7 +147,7 @@
   --m-hero-delay: 80ms;
   --m-rail-delay: 450ms;
   --m-off: 0.01ms; /* reduced motion: effectively instant */
-  --m-orbit: 90s; /* one turn of the dashed ring */
+  --m-orbit: 120s; /* one slow lap of the experience orbit */
   --m-vt-out: 140ms;
   --m-vt-in: 260ms;
   --m-vt-delay: 90ms;

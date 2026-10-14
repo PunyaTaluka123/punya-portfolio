@@ -183,6 +183,16 @@ await gate(1, 'Type check, lint and format', () => {
   );
   const l = run('npx', ['eslint', '.', '--max-warnings', '0']);
   must(l.status === 0, `eslint: ${l.stdout.trim().split('\n').slice(0, 3).join(' | ')}`);
+  // A pseudo-element inside :is()/:where() makes the whole rule invalid, silently.
+  const badSel = readdirSync(join(ROOT, 'src/styles'))
+    .flatMap((f) =>
+      [...read(join(ROOT, 'src/styles', f)).matchAll(/([^{}]*)\{/g)].map((m) => [f, m[1]]),
+    )
+    .filter(([, sel]) => /:(is|where)\([^)]*::/.test(sel));
+  must(
+    !badSel.length,
+    `pseudo-element inside :is()/:where() in ${badSel.map(([f]) => f).join(', ')}`,
+  );
   const f = run('npx', ['prettier', '--check', '.']);
   must(
     f.status === 0,

@@ -223,6 +223,61 @@ for (const pop of document.querySelectorAll<HTMLElement>('.xp-pop')) {
   });
 }
 
+/* Experience orbit: brake to a stop with a small wobble (a damped spring on the
+   playback rate, so it drifts back a touch before settling), then ease back up. */
+const orbit = document.querySelector<HTMLElement>('.xp-section .orbit');
+if (orbit) {
+  orbit.classList.add('eased');
+  const spins = () =>
+    orbit
+      .getAnimations({ subtree: true })
+      .filter((a) => /^(counter-)?spin$/.test((a as CSSAnimation).animationName));
+  let raf = 0;
+  let rate = 1;
+  const shouldStop = () =>
+    !!orbit.querySelector('.orbit-title:hover, .orbit-title:focus-visible, :popover-open');
+  let stopping = false;
+  const steer = () => {
+    const stop = shouldStop();
+    if (stop === stopping) return; // moving between a title's children: keep going
+    stopping = stop;
+    cancelAnimationFrame(raf);
+    const from = rate;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = (now - start) / 1000;
+      // stop: damped oscillation from `from` to 0 (wobble); go: ease-out back to 1
+      rate = stop
+        ? from * Math.exp(-5 * t) * Math.cos(9 * t)
+        : from + (1 - from) * (1 - Math.exp(-4 * t));
+      const done = stop ? t > 1.2 : t > 1.5;
+      if (done) rate = stop ? 0 : 1;
+      for (const a of spins()) a.playbackRate = rate;
+      if (!done) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+  };
+  for (const ev of ['pointerover', 'pointerout', 'focusin', 'focusout'])
+    orbit.addEventListener(ev, () => requestAnimationFrame(steer));
+  for (const pop of orbit.querySelectorAll('.xp-pop')) pop.addEventListener('toggle', steer);
+}
+
+/* "← All projects": if we came from the home page, go back in history instead, so
+   the visitor lands on the exact card they left (instant, no transition). */
+document
+  .querySelector<HTMLAnchorElement>('.crumbs a[href="/#projects"]')
+  ?.addEventListener('click', (e) => {
+    const from = document.referrer ? new URL(document.referrer) : null;
+    if (
+      from?.origin === location.origin &&
+      from.pathname.replace(/index(\.html)?$/, '') === '/' &&
+      history.length > 1
+    ) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+
 /* Copy as Markdown */
 const copyBtn = document.getElementById('copy-md');
 const copyStatus = document.getElementById('copy-status');

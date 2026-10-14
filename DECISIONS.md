@@ -145,3 +145,15 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 ## D24. "My part" rows removed (owner request)
 
 - The project detail lists no longer have a "My part" row. DermaTrack still says "designed" in its one-liner and on its page.
+
+## D25. The orbit brakes with a wobble; roles get an accent ring on hover (owner request)
+
+- **Braking:** with JS, the orbit no longer stops dead. On hover, focus or an open box, `main.ts` drives the spin animations' `playbackRate` through a damped spring (1 → about −0.2 → 0 over about 1.2 s), so it drifts back a touch before settling. On leaving, it eases back to full speed. List and boxes share one rate, so the text stays upright. Without JS, the CSS hard stop remains as a fallback.
+- **Hover ring:** an accent ring around the hovered, focused or open role, drawn with `opacity` and `scale` only.
+
+## D26. Returning to the project stack (owner reported again)
+
+- **Cause:** "← All projects" went to `/#projects`, and `scroll-behavior: smooth` on `html` made the browser smooth-scroll from the top of the page on arrival, racing past every section.
+- **Fixes:**
+  - Smooth scrolling now applies only for in-page link clicks (`html:focus-within`).
+  - When the visitor came from the home page, "← All projects" calls `history.back()`. They land on the exact card they left, instantly, because back/forward skips the transition (D22).

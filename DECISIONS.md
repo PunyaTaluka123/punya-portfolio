@@ -157,3 +157,8 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 - **Fixes:**
   - Smooth scrolling now applies only for in-page link clicks (`html:focus-within`).
   - When the visitor came from the home page, "← All projects" calls `history.back()`. They land on the exact card they left, instantly, because back/forward skips the transition (D22).
+
+## D27. The clicked card stayed raised after "back" (owner reported)
+
+- **Cause:** clicking a card focuses its link, and the browser keeps that focus when you return. The rule `.card:focus-within { z-index: 1 }` (added so keyboard users never tab into a hidden card) then lifted that card above the cards that should stack over it.
+- **Fix:** the raise, lift, outline and corner brackets now use `:has(:focus-visible)`. Focus left over from a mouse click doesn't count, but keyboard focus still raises the card. I tested both cases.

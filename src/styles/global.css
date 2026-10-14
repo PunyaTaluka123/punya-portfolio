@@ -926,7 +926,7 @@ button {
   top: calc(var(--header-h) + var(--stack-top) + var(--k, 0) * var(--s-5));
 }
 
-.card:focus-within {
+.card:has(:focus-visible) {
   z-index: 1; /* a focused card must never sit under the next one in the stack */
 }
 
@@ -965,11 +965,11 @@ button {
 }
 
 .card article:hover,
-.card article:focus-within {
+.card article:has(:focus-visible) {
   transform: translateY(calc(-1 * var(--lift)));
 }
 
-.card article:focus-within {
+.card article:has(:focus-visible) {
   outline: var(--focus-w) solid var(--c-accent);
   outline-offset: var(--focus-w);
 }
@@ -1094,7 +1094,7 @@ button {
 }
 
 .card article:hover :is(.bracket, .det),
-.card article:focus-within :is(.bracket, .det) {
+.card article:has(:focus-visible) :is(.bracket, .det) {
   opacity: 1;
   transform: none;
 }

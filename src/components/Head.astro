@@ -68,6 +68,8 @@ const ogImage = new URL('/og.png', Astro.site);
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
     <script is:inline src={bootScript} />
+    {/* Vercel Web Analytics: cookieless, served from this domain (CSP 'self' allows it). */}
+    <script is:inline defer src="/_vercel/insights/script.js" />
   </>
 )}
 {jsonLd && (

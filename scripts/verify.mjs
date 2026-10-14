@@ -122,6 +122,14 @@ const vercel = JSON.parse(read(join(ROOT, 'vercel.json')));
 function serve() {
   const server = createServer((req, res) => {
     const path = decodeURIComponent(new URL(req.url, BASE).pathname);
+    // Vercel serves /_vercel/insights/* (Web Analytics) at runtime; stand in for it locally.
+    if (path.startsWith('/_vercel/insights/'))
+      return res
+        .writeHead(path.endsWith('.js') ? 200 : 204, {
+          'Content-Type': 'text/javascript',
+          'X-Verify-Server': '1',
+        })
+        .end(path.endsWith('.js') ? '/* local stand-in for Vercel Web Analytics */' : undefined);
     const candidates =
       path === '/' ? ['/index.html'] : [path, `${path}.html`, `${path}/index.html`];
     let file = candidates
@@ -244,6 +252,7 @@ await gate(4, 'Link check', async () => {
         continue;
       }
       const [path, hash] = ref.split('#');
+      if (path.startsWith('/_vercel/')) continue; // served by Vercel at runtime, not in dist/
       const target = path ? resolve(path.split('?')[0]) : file;
       if (!target) issues.push(`${file.slice(DIST.length)}: broken internal link ${ref}`);
       else if (hash && target.endsWith('.html') && !ids(read(target)).has(hash))
@@ -362,7 +371,16 @@ await gate(6, 'Lighthouse (mobile, throttled)', async () => {
       ].map((m) => m[1]),
     ),
   ];
-  const jsGz = scripts.reduce((n, s) => n + gzipSync(readFileSync(join(DIST, s))).length, 0);
+  // /_vercel/insights/script.js is served by Vercel (about 1.5 KB gzipped); add an allowance.
+  const VERCEL_ANALYTICS_GZ = 2048;
+  const jsGz = scripts.reduce(
+    (n, s) =>
+      n +
+      (s.startsWith('/_vercel/')
+        ? VERCEL_ANALYTICS_GZ
+        : gzipSync(readFileSync(join(DIST, s))).length),
+    0,
+  );
   if (jsGz >= 120 * 1024) issues.push(`home JS ${jsGz} B gzipped >= 120 KB`);
   writeFileSync(
     join(REPORTS, 'gate6-lighthouse.txt'),

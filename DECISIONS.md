@@ -195,3 +195,13 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
   - two dashed accent arcs turning in opposite directions
 
   The major ticks also switch to the accent colour, and the readouts flicker on (an opacity "boot"). Only opacity and transform animate. Everything turns off with reduced motion and in the LLM view.
+
+## D32. Analytics: Vercel Web Analytics (owner request, 2026-10-14)
+
+- The brief first said not to install analytics; the owner later asked for it.
+- **Why Vercel Web Analytics:** it is cookieless (no consent banner), shows country, referrer, pages and device but no identities, and its script and beacon live on the site's own domain under `/_vercel/insights/`. The CSP stays `script-src 'self'; connect-src 'self'` with no new domains.
+- **Where it loads:** every page except `/llm`, which must stay script-free.
+- **Gate changes (none weaken a check):**
+  - the link gate skips the platform-provided `/_vercel/` path, which is not in `dist/`
+  - the local test server returns a stand-in for it, so no 404 shows up in the console
+  - the JS budget adds a 2 KB allowance for Vercel's script

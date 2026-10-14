@@ -91,6 +91,12 @@ npm run verify -- 5 6   # only some gates
 
 Output goes to `reports/` and `screenshots/`, which git ignores. CI runs the same command on every pull request (`.github/workflows/verify.yml`).
 
+## Analytics
+
+Vercel Web Analytics is wired in: `src/components/Head.astro` loads `/_vercel/insights/script.js` on every page except the script-free `/llm`. It sets no cookies, so it needs no consent banner. It shows visitors, pages, referrers, countries and devices, but not identities.
+
+To turn it on, open the project in Vercel, go to the **Analytics** tab and click **Enable**. Until you do, the script path returns 404 and nothing is tracked. Locally, `npm run verify` serves a stand-in for that path, so the gates behave like production.
+
 ## Deploy to Vercel
 
 1. Push the repo to GitHub.

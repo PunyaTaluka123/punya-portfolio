@@ -38,6 +38,14 @@ export const site = {
   },
   handles: { github: 'PunyaTaluka123', linkedin: 'punyataluka' },
 
+  /** Numbers shown beside the experience orbit (each one is also in a role's details). */
+  highlights: [
+    { value: '450+', label: 'Datathon participants' },
+    { value: '100+', label: 'students reached by StemCast' },
+    { value: '260', label: 'books donated' },
+    { value: '5', label: 'podcasts with STEM experts' },
+  ],
+
   /** Short interface text that isn't a fact about me: rails, buttons, prompts. */
   copy: {
     railTop: ['Data Science + AI', 'NTU Singapore', 'Year 1 · Class of 2030'],

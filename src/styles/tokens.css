@@ -136,6 +136,7 @@
   --pop-w: 32rem; /* comment box width */
   --tail: 14px;
   --node: 9px;
+  --readout-w: 13rem; /* side readouts beside the experience orbit */
   --grid-gap: 22px; /* dot grid behind the orbit, same pitch as the hero field */
   --radius: 2px;
 
@@ -150,6 +151,8 @@
   --m-rail-delay: 450ms;
   --m-off: 0.01ms; /* reduced motion: effectively instant */
   --m-orbit: 120s; /* one slow lap of the experience orbit */
+  --m-sweep: 4s; /* HUD radar sweep, one turn */
+  --m-arc: 14s; /* HUD arcs, one turn */
   --m-vt-out: 140ms;
   --m-vt-in: 260ms;
   --m-vt-delay: 90ms;

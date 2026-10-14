@@ -186,3 +186,12 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 
 - StemCast gained the details the owner gave in chat.
 - Skills gained a "Soft skills" group, a placeholder list the owner asked for and plans to replace (`skills.soft` in `site.ts`).
+
+## D31. Orbit sides and HUD hover (owner request)
+
+- **Sides:** at 1280 px and wider, a crosshair ruler with ticks runs from the outer ring to both page edges. Above it on the left sits a readout of roles, span and latest role; below it on the right sit the real numbers (450+, 100+, 260, 5). Each number also appears in a role's details. The readouts are `aria-hidden` to avoid reading them twice, and are hidden below 1280 px and in the LLM view.
+- **HUD hover:** hovering the orbit fades in and springs up two hidden layers:
+  - a radar sweep wedge (4 s per turn)
+  - two dashed accent arcs turning in opposite directions
+
+  The major ticks also switch to the accent colour, and the readouts flicker on (an opacity "boot"). Only opacity and transform animate. Everything turns off with reduced motion and in the LLM view.

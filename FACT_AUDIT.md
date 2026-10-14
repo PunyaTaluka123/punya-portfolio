@@ -92,14 +92,15 @@ All resume files are in `~/Downloads/Careers/Resumes/`. I did not use the two `D
 
 ## Skills and interests
 
-| #   | Claim                                                                                                                                               | Source                             |
-| --- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| 46  | Languages: Python, Go, TypeScript, Java, C++, Kotlin, PHP                                                                                           | F (Go, Python, PHP), R1 (the rest) |
-| 47  | Areas: Machine learning, Computer vision, Web development                                                                                           | F                                  |
-| 48  | ML libraries: PyTorch, Detectron2, scikit-learn, XGBoost, pandas                                                                                    | R1, R4                             |
-| 49  | Tools: Git, Docker, PostgreSQL, Kafka, Databricks, Gemini API, n8n                                                                                  | R1                                 |
-| 50  | Interests: ML and AI engineering, computer vision, reinforcement learning, quant finance, competitive programming                                   | F                                  |
-| 51  | Soft skills: Communication, Leadership, Teamwork, Mentoring, Problem solving, Adaptability (a placeholder list the owner asked for, to be replaced) | C4                                 |
+| #   | Claim                                                                                                                                                                                                | Source                                                                                                        |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| 46  | Languages: Python, Go, TypeScript, Java, C++, Kotlin, PHP                                                                                                                                            | F (Go, Python, PHP), R1 (the rest)                                                                            |
+| 47  | Areas: Machine learning, Computer vision, Web development                                                                                                                                            | F                                                                                                             |
+| 48  | ML libraries: PyTorch, Detectron2, scikit-learn, XGBoost, pandas                                                                                                                                     | R1, R4                                                                                                        |
+| 49  | Tools: Git, Docker, PostgreSQL, Kafka, Databricks, Gemini API, n8n                                                                                                                                   | R1                                                                                                            |
+| 50  | Interests: ML and AI engineering, computer vision, reinforcement learning, quant finance, competitive programming                                                                                    | F                                                                                                             |
+| 51  | Soft skills: Communication, Leadership, Teamwork, Mentoring, Problem solving, Adaptability (a placeholder list the owner asked for, to be replaced)                                                  | C4                                                                                                            |
+| 52  | Orbit side readouts: Roles 05; Span 2023 — 2026; Latest: Academic Lead, October 2026; 450+ Datathon participants; 100+ students reached by StemCast; 260 books donated; 5 podcasts with STEM experts | Counts and dates from rows 16 to 29: F (450+, Datathon October 2026), R1 (KDK Summer 2023), C3 (100+, 260, 5) |
 
 ## Left out on purpose
 

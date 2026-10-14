@@ -736,7 +736,8 @@ button {
   transition: translate var(--m-slow) var(--ease-spring);
 }
 
-.orbit-deco {
+.orbit-deco,
+.xp-readout {
   display: none;
 }
 
@@ -838,6 +839,12 @@ button {
   }
 }
 
+@media (min-width: 1000px) and (max-width: 1279px) {
+  .xp-readout {
+    display: none !important;
+  }
+}
+
 /* The circle */
 @media (min-width: 1000px) {
   .xp-section .orbit {
@@ -904,6 +911,54 @@ button {
     stroke: var(--c-muted);
   }
 
+  .deco-rulers line {
+    stroke: var(--c-muted);
+  }
+
+  /* HUD layers (shown on hover) */
+  .hud {
+    opacity: 0;
+    transform: scale(0.9);
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    transition:
+      opacity var(--m-base),
+      transform var(--m-slow) var(--ease-spring);
+  }
+
+  .orbit:hover .hud {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hud-sweep path {
+    fill: var(--c-accent);
+    stroke: none;
+    opacity: 0.12;
+  }
+
+  .orbit-deco .hud :is(line, circle) {
+    stroke: var(--c-accent);
+  }
+
+  .hud-arcs circle {
+    stroke-width: var(--line-strong);
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+  }
+
+  .hud-arcs .arc-outer {
+    stroke-dasharray: 9 4 1 4;
+  }
+
+  .hud-arcs .arc-inner {
+    stroke-dasharray: 2 7;
+  }
+
+  .orbit:hover .deco-ticks .major {
+    stroke: var(--c-accent);
+  }
+
   .deco-spokes line {
     stroke: var(--c-accent);
     stroke-dasharray: 2 3;
@@ -921,6 +976,42 @@ button {
   .deco-text {
     transform-box: view-box;
     transform-origin: 50% 50%;
+  }
+
+  /* Readouts in the side space, either side of the crosshair line. */
+  .xp-readout {
+    position: absolute;
+    display: grid;
+    gap: var(--s-4);
+    width: var(--readout-w);
+    margin: 0;
+    color: var(--c-muted);
+  }
+
+  .xp-readout-left {
+    right: calc(100% + var(--s-6));
+    bottom: calc(50% + var(--s-5));
+    text-align: right;
+  }
+
+  .xp-readout-right {
+    left: calc(100% + var(--s-6));
+    top: calc(50% + var(--s-5));
+  }
+
+  .xp-readout dd {
+    margin: 0;
+    color: var(--c-ink);
+    font-family: var(--f-display);
+    font-size: var(--t-label);
+    font-weight: 700;
+    letter-spacing: var(--tr-snug);
+    text-transform: none;
+  }
+
+  .xp-readout-right dd {
+    font-size: var(--t-h3);
+    color: var(--c-accent);
   }
 
   .orbit-core {
@@ -1750,6 +1841,23 @@ button {
       animation: counter-spin calc(var(--m-orbit) * 1.5) linear infinite;
     }
 
+    /* HUD "power up" on hover: radar sweep, counter-turning arcs, readouts flicker on. */
+    :root:not([data-view='llm']) .hud-sweep {
+      animation: spin var(--m-sweep) linear infinite;
+    }
+
+    :root:not([data-view='llm']) .hud-arcs .arc-outer {
+      animation: spin var(--m-arc) linear infinite;
+    }
+
+    :root:not([data-view='llm']) .hud-arcs .arc-inner {
+      animation: counter-spin calc(var(--m-arc) * 0.6) linear infinite;
+    }
+
+    :root:not([data-view='llm']) .orbit:hover .xp-readout {
+      animation: hud-boot var(--m-slow) steps(1) both;
+    }
+
     :root:not([data-view='llm']) .orbit-item {
       animation: counter-spin var(--m-orbit) linear infinite;
     }
@@ -1861,6 +1969,32 @@ button {
 @keyframes spin {
   to {
     rotate: 360deg;
+  }
+}
+
+@keyframes hud-boot {
+  0% {
+    opacity: 0.2;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  35% {
+    opacity: 0.35;
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 
@@ -2041,6 +2175,7 @@ button {
    entry silently drops the whole rule. */
 :root[data-view='llm'] :is(.orbit-title, .orbit-core .hint, .pop-close),
 :root[data-view='llm'] .orbit-deco,
+:root[data-view='llm'] .xp-readout,
 :root[data-view='llm'] .orbit::after,
 :root[data-view='llm'] .orbit::before,
 :root[data-view='llm'] .orbit-item::before,

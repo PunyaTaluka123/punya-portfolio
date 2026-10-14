@@ -28,6 +28,15 @@ const spokes = site.experience.map((_, i) => {
   const [x2, y2] = polar(28, (i / n) * 360);
   return { x1, y1, x2, y2 };
 });
+// Crosshair rulers either side of the orbit, drawn past the SVG's box (overflow visible).
+const rulerTicks = Array.from({ length: 16 }, (_, i) => i * 4);
+const latest = site.experience[0];
+// HUD sweep: a thin wedge between the inner text ring and the outer ring.
+const [ax1, ay1] = polar(21.5, -20);
+const [ax2, ay2] = polar(46, -20);
+const [ax3, ay3] = polar(46, 0);
+const [ax4, ay4] = polar(21.5, 0);
+const sweep = `M${ax1},${ay1} L${ax2},${ay2} A46,46 0 0 1 ${ax3},${ay3} L${ax4},${ay4} A21.5,21.5 0 0 0 ${ax1},${ay1} Z`;
 const ringText =
   `${site.experience.map((x) => x.org.split(',')[0]).join(' · ')} · 2023 — 2026 · `.toUpperCase();
 
@@ -142,6 +151,25 @@ const jsonLd = {
             <line x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} />
           ))}
         </g>
+        <g class="deco-rulers">
+          <line x1="-62" y1="50" x2="2" y2="50"></line>
+          <line x1="98" y1="50" x2="162" y2="50"></line>
+          {rulerTicks.map((d) => (
+            <>
+              <line x1={-2 - d} y1={d % 16 === 0 ? 48.6 : 49.3} x2={-2 - d} y2="50" />
+              <line x1={102 + d} y1="50" x2={102 + d} y2={d % 16 === 0 ? 51.4 : 50.7} />
+            </>
+          ))}
+        </g>
+        <!-- HUD layers: hidden until the orbit is hovered, then they power up. -->
+        <g class="hud hud-sweep">
+          <path d={sweep}></path>
+          <line x1={ax4} y1={ay4} x2={ax3} y2={ay3}></line>
+        </g>
+        <g class="hud hud-arcs">
+          <circle class="arc-outer" cx="50" cy="50" r="43"></circle>
+          <circle class="arc-inner" cx="50" cy="50" r="24.5"></circle>
+        </g>
         <g class="deco-text">
           <path id="orbit-text-path" d="M50,30.5 a19.5,19.5 0 1,1 -0.01,0" fill="none"></path>
           <text>
@@ -151,6 +179,30 @@ const jsonLd = {
           </text>
         </g>
       </svg>
+      <dl class="xp-readout xp-readout-left mono" aria-hidden="true">
+        <div>
+          <dt>Roles</dt>
+          <dd>{String(n).padStart(2, '0')}</dd>
+        </div>
+        <div>
+          <dt>Span</dt>
+          <dd>2023 — 2026</dd>
+        </div>
+        <div>
+          <dt>Latest</dt>
+          <dd>
+            {latest?.role}, {latest?.when}
+          </dd>
+        </div>
+      </dl>
+      <dl class="xp-readout xp-readout-right mono" aria-hidden="true">
+        {site.highlights.map((h) => (
+          <div>
+            <dd>{h.value}</dd>
+            <dt>{h.label}</dt>
+          </div>
+        ))}
+      </dl>
       <div class="orbit-core sec-head">
         <span class="mono">02</span>
         <h2 id="xp-h">Experience</h2>

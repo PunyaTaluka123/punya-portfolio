@@ -675,7 +675,13 @@ button {
   border: var(--line) solid var(--c-line);
   border-radius: var(--radius);
   cursor: pointer;
-  transition: transform var(--m-base) var(--ease-out);
+  /* --mx/--my/--tilt are set by main.ts from the cursor position */
+  translate: var(--mx, 0) var(--my, 0);
+  rotate: var(--tilt, 0deg);
+  transition:
+    transform var(--m-base) var(--ease-out),
+    translate var(--m-slow) var(--ease-spring),
+    rotate var(--m-slow) var(--ease-spring);
 }
 
 .orbit-title::after {
@@ -723,6 +729,11 @@ button {
 .orbit-item:has(:popover-open) .orbit-title {
   border-color: var(--c-accent);
   background: var(--c-surface);
+}
+
+.orbit-core {
+  translate: var(--mx, 0) var(--my, 0);
+  transition: translate var(--m-slow) var(--ease-spring);
 }
 
 /* The comment box */
@@ -1698,8 +1709,62 @@ button {
     }
   }
 
+  /* Comment box: pops out of its role as a thin strip (transform), then opens to
+     the left and right (scale), then the text fades in. Closing runs it backwards:
+     each state sets the delays for the transition INTO it. */
+  :root:not([data-view='llm']) .xp-pop {
+    --from-y: calc(-1 * var(--pop-from));
+    transform-origin: 50% 0;
+    opacity: 0;
+    transform: translateY(var(--from-y)) scaleY(0.25);
+    scale: 0.06 1;
+    transition:
+      scale var(--m-open) var(--ease-in-out),
+      transform var(--m-pop) var(--ease-in-out) var(--m-open),
+      opacity var(--m-pop) linear var(--m-open),
+      display calc(var(--m-open) + var(--m-pop)) allow-discrete,
+      overlay calc(var(--m-open) + var(--m-pop)) allow-discrete;
+  }
+
+  :root:not([data-view='llm']) .opens-above .xp-pop {
+    --from-y: var(--pop-from);
+    transform-origin: 50% 100%;
+  }
+
   :root:not([data-view='llm']) .xp-pop:popover-open {
-    animation: pop-in var(--m-base) var(--ease-out);
+    opacity: 1;
+    transform: none;
+    scale: 1;
+    transition:
+      opacity var(--m-pop) linear,
+      transform var(--m-pop) var(--ease-spring),
+      scale var(--m-open) var(--ease-spring) var(--m-pop),
+      display 0s allow-discrete,
+      overlay 0s allow-discrete;
+  }
+
+  @starting-style {
+    :root:not([data-view='llm']) .xp-pop:popover-open {
+      opacity: 0;
+      transform: translateY(var(--from-y)) scaleY(0.25);
+      scale: 0.06 1;
+    }
+  }
+
+  :root:not([data-view='llm']) .xp-pop > * {
+    opacity: 0;
+    transition: opacity var(--m-fast) linear;
+  }
+
+  :root:not([data-view='llm']) .xp-pop:popover-open > * {
+    opacity: 1;
+    transition: opacity var(--m-text) linear calc(var(--m-pop) + var(--m-open) * 0.7);
+  }
+
+  @starting-style {
+    :root:not([data-view='llm']) .xp-pop:popover-open > * {
+      opacity: 0;
+    }
   }
 
   /* Page changes: old page fades out, then the new one fades in. A plain cross-fade
@@ -1735,13 +1800,6 @@ button {
     translate: calc(cos(var(--a)) * var(--orbit-pull) * -1)
       calc(sin(var(--a)) * var(--orbit-pull) * -1);
     scale: 0.6;
-  }
-}
-
-@keyframes pop-in {
-  from {
-    opacity: 0;
-    translate: 0 var(--bracket-off);
   }
 }
 

@@ -262,6 +262,53 @@ if (orbit) {
   for (const pop of orbit.querySelectorAll('.xp-pop')) pop.addEventListener('toggle', steer);
 }
 
+/* Experience orbit follows the cursor a little: nearby roles lean toward it, the
+   centre drifts away. CSS springs the values (with overshoot), so it wobbles. */
+if (orbit && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  const titles = [...orbit.querySelectorAll<HTMLElement>('.orbit-title')];
+  const core = orbit.querySelector<HTMLElement>('.orbit-core');
+  const REACH = 420; // px around a role where it leans toward the cursor
+  const PULL = 22; // px a role can move toward the cursor
+  const TILT = 7; // deg a role can lean
+  const DRIFT = 0.03; // every role drifts with the cursor anywhere in the orbit
+  let frame = 0;
+  let px = 0;
+  let py = 0;
+  const set = (el: HTMLElement | null, x: number, y: number, tilt = 0) => {
+    el?.style.setProperty('--mx', `${x.toFixed(1)}px`);
+    el?.style.setProperty('--my', `${y.toFixed(1)}px`);
+    if (tilt) el?.style.setProperty('--tilt', `${tilt.toFixed(2)}deg`);
+    else el?.style.removeProperty('--tilt');
+  };
+  const apply = () => {
+    frame = 0;
+    const o = orbit.getBoundingClientRect();
+    const ox = (px - (o.left + o.width / 2)) * DRIFT;
+    const oy = (py - (o.top + o.height / 2)) * DRIFT;
+    for (const t of titles) {
+      const r = t.getBoundingClientRect();
+      const dx = px - (r.left + r.width / 2);
+      const dy = py - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      const k = Math.max(0, 1 - d / REACH);
+      set(t, ox + (dx / d) * k * PULL, oy + (dy / d) * k * PULL, (dx / d) * k * TILT);
+    }
+    set(core, (o.left + o.width / 2 - px) * 0.025, (o.top + o.height / 2 - py) * 0.025);
+  };
+  const reset = () => {
+    for (const el of [...titles, core]) set(el, 0, 0);
+  };
+  orbit.addEventListener('pointermove', (e) => {
+    // Hold still while reading an open box; no motion when motion is off.
+    if (!motionOK() || e.pointerType !== 'mouse' || orbit.querySelector(':popover-open')) return;
+    px = e.clientX;
+    py = e.clientY;
+    if (!frame) frame = requestAnimationFrame(apply);
+  });
+  orbit.addEventListener('pointerleave', reset);
+  for (const pop of orbit.querySelectorAll('.xp-pop')) pop.addEventListener('toggle', reset);
+}
+
 /* "← All projects": if we came from the home page, go back in history instead, so
    the visitor lands on the exact card they left (instant, no transition). */
 document

@@ -162,3 +162,11 @@ A small motif ties this together, and it is my own idea rather than a fourth ref
 
 - **Cause:** clicking a card focuses its link, and the browser keeps that focus when you return. The rule `.card:focus-within { z-index: 1 }` (added so keyboard users never tab into a hidden card) then lifted that card above the cards that should stack over it.
 - **Fix:** the raise, lift, outline and corner brackets now use `:has(:focus-visible)`. Focus left over from a mouse click doesn't count, but keyboard focus still raises the card. I tested both cases.
+
+## D28. The experience orbit reacts to the cursor; boxes open in stages (owner request)
+
+- **Cursor:** on a fine pointer, every role drifts slightly with the cursor anywhere in the orbit. Roles within 420 px also lean toward it (up to 22 px and 7°), and the "Experience" centre drifts the other way. `main.ts` only sets CSS variables, once per frame. The movement itself is a CSS transition with an overshooting spring easing (`--ease-spring`), so it wobbles. It holds still while a box is open, and is off with reduced motion and in the LLM view.
+- **Comment box:**
+  - opening: it pops out of its role as a thin strip (`transform`), opens left and right (`scale` from the centre), and then its text fades in
+  - closing: the same steps backwards
+  - mechanism: CSS transitions with `@starting-style` and `allow-discrete` on `display`/`overlay`, with different delays per direction; only transform and opacity animate

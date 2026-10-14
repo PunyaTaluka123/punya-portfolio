@@ -23,18 +23,21 @@ const pad = (k: number) => String(k).padStart(2, '0');
 
 <Base title={`${project.name}: ${site.name}`} description={`${project.name}. ${project.oneLine}`}>
   <article class="project-page" aria-labelledby="project-title">
-    <p class="crumbs mono">
-      <a class="draw" href="/#projects">
-        ← All projects
-      </a>
-      <span>
-        Project {pad(i + 1)} of {pad(n)}
-      </span>
-    </p>
-    <h1 id="project-title" class={`project-title vt-${i + 1}`}>
-      {project.name}
-    </h1>
-    <p class="lead">{project.oneLine}</p>
+    <header class="project-hero">
+      <canvas class="field" aria-hidden="true"></canvas>
+      <p class="crumbs mono">
+        <a class="draw" href="/#projects">
+          ← All projects
+        </a>
+        <span>
+          Project {pad(i + 1)} of {pad(n)}
+        </span>
+      </p>
+      <h1 id="project-title" class={`project-title vt-${i + 1}`}>
+        {project.name}
+      </h1>
+      <p class="lead">{project.oneLine}</p>
+    </header>
     <div class="prose reveal">
       {project.body.map((para) => (
         <p>{para}</p>

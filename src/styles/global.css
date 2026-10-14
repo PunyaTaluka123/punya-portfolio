@@ -595,8 +595,20 @@ button {
 }
 
 .xp-row h3 .org {
+  display: block;
   color: var(--c-muted);
   font-weight: 500;
+}
+
+.xp-row h3 .sep {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .xp-row h3 .org,
+  .xp-row h3 .sep {
+    display: inline;
+  }
 }
 
 .xp-row ul {
@@ -675,7 +687,7 @@ button {
   flex-direction: column;
   justify-content: space-between;
   gap: var(--s-7);
-  min-height: min(68svh, 36rem);
+  min-height: min(56svh, 30rem);
   padding: var(--s-5);
   background: var(--c-surface);
   border: 1px solid var(--c-line);
@@ -828,6 +840,7 @@ button {
 
 @media (min-width: 900px) {
   .card article {
+    min-height: min(68svh, 36rem);
     padding: var(--s-6) var(--s-7);
   }
 
@@ -986,7 +999,24 @@ button {
 .project-page {
   display: grid;
   gap: var(--s-7);
-  padding: var(--s-6) var(--gutter) var(--s-9);
+  padding: 0 var(--gutter) var(--s-9);
+}
+
+.project-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: var(--s-6);
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--s-6) var(--gutter) var(--s-8);
+  border-bottom: 1px solid var(--c-line);
+  overflow: clip;
+}
+
+.project-hero .crumbs > *,
+.project-hero .lead {
+  justify-self: start;
+  background: var(--c-bg);
 }
 
 .crumbs {
@@ -1097,10 +1127,6 @@ button {
 
   .project-page > * {
     grid-column: 1 / -1;
-  }
-
-  .project-page .lead {
-    grid-column: 1 / span 8;
   }
 
   .project-page .prose {
@@ -1405,8 +1431,9 @@ button {
   white-space: normal;
 }
 
+/* :where() keeps this reset at low specificity so the spacing rules below win. */
 :root[data-view='llm']
-  :is(
+  :where(
     .hero,
     .section,
     .hero-meta,
@@ -1414,7 +1441,8 @@ button {
     .about-body,
     .skills,
     .card article,
-    .project-page
+    .project-page,
+    .lost
   ) {
   display: block;
   min-height: 0;
@@ -1422,7 +1450,15 @@ button {
   margin: 0;
   border: 0;
   background: none;
-  transform: none;
+  transform: none !important;
+}
+
+:root[data-view='llm'] main :is(p, ul, ol, dl, .xp-row, .card article, .spec-wrap) {
+  margin-block: 0 var(--s-4);
+}
+
+:root[data-view='llm'] main :is(h2, .sec-head) {
+  margin-block: 0 var(--s-4);
 }
 
 :root[data-view='llm'] :is(.hero, .section, .project-page, .lost) {
@@ -1470,6 +1506,16 @@ button {
   margin-bottom: var(--s-5);
 }
 
+:root[data-view='llm'] :is(.xp, .xp-row, .project-hero) {
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+}
+
+:root[data-view='llm'] .xp-row::before {
+  content: none;
+}
+
 :root[data-view='llm'] .card-title a::after {
   content: none;
 }
@@ -1486,6 +1532,10 @@ button {
 :root[data-view='llm'] a {
   color: var(--c-accent);
   text-decoration: underline;
+}
+
+:root[data-view='llm'] .cta {
+  align-items: baseline;
 }
 
 :root[data-view='llm'] .btn {

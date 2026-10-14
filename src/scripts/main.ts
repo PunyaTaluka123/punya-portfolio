@@ -57,7 +57,7 @@ function createField(canvas: HTMLCanvasElement) {
     const rows = Math.ceil(h / GAP);
     // Kernel position: steps one cell at a time, eased, scanning row by row.
     const span = Math.max(cols - K, 1);
-    const pos = t / 650;
+    const pos = t / 650 + span * 6; // start a few rows down, clear of the small text
     const n = Math.floor(pos);
     const e = 1 - Math.pow(1 - (pos - n), 3);
     const step = n % span;

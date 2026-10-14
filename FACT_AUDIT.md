@@ -1,0 +1,88 @@
+# Fact audit (gate 11)
+
+Method:
+1. I pulled every distinct text string out of `dist/`. That covers all HTML pages, including meta and title tags, plus `portfolio.md` and `llms.txt`.
+2. I matched each claim to the line of `<facts>` or `<values>` that supports it.
+3. The only other source allowed is the user's public GitHub, which `<facts>` permits ("Can scrape my github or linkedIn for more detailed information if needed"). I name the exact repo files.
+4. `content.json` is a JSON dump of `src/data/site.ts`, the same object every page renders. So it holds the same claims, plus one expansion (row 2).
+
+UI labels (for example "Skip to content", "Read more →", "LLM view", "Copy as Markdown", "Project 02 of 03", section names) and URLs are navigation, not claims. They are not listed.
+
+## Identity and contact
+| # | Claim on the site | Where | Source |
+|---|---|---|---|
+| 1 | Name: Punya Taluka | everywhere | `<facts>` Name: Punya Taluka |
+| 2 | "Data Science and AI student at NTU Singapore. I build ML systems, with a focus on computer vision." | hero, glance, meta, OG, llms.txt, md | `<facts>` Role line (verbatim) |
+| 3 | Meta description: "…is a Data Science and AI student at NTU Singapore who builds ML systems, with a focus on computer vision." | `<meta name=description>`, manifest | `<facts>` Role line (rephrased in third person) |
+| 4 | Rails: "Data Science + AI", "NTU Singapore", "Computer vision / ML systems" | home hero | `<facts>` Role line; Education line 1 |
+| 5 | JSON-LD `alumniOf` / content.json `schoolFull`: "Nanyang Technological University (NTU Singapore)" | home JSON-LD, content.json | `<facts>` Education line 1 ("NTU Singapore"). The expansion is the university's official name. |
+| 6 | JSON-LD `jobTitle`: "Data Science and AI student" | home JSON-LD | `<facts>` Role line |
+| 7 | Email talukapunya.1@gmail.com | header glance, contact, /llm, md, txt, JSON-LD | `<values>` EMAIL |
+| 8 | GitHub https://github.com/PunyaTaluka123 ("PunyaTaluka123") | header, contact, glance, /llm, md, txt, JSON-LD sameAs | `<values>` GITHUB_URL |
+| 9 | LinkedIn https://www.linkedin.com/in/punyataluka/ ("punyataluka") | header, contact, glance, /llm, md, txt, JSON-LD sameAs | `<values>` LINKEDIN_URL |
+| 10 | "Want to talk ML, computer vision or a project? Send me an email." | contact | An invitation, not a factual claim. Topics come from `<facts>` Role line and Interests. |
+| 11 | "© 2026 Punya Taluka" | footer | `<facts>` Name; the current year |
+
+## About and education
+| # | Claim | Where | Source |
+|---|---|---|---|
+| 12 | "I'm Punya. I study Data Science and AI at NTU Singapore. I'm in year one, class of 2030." | about, /llm, md | `<facts>` Name; Education line 1 ("Year 1. Class of 2030.") |
+| 13 | "I build ML systems. Most of them are about computer vision: getting a model to make sense of what a camera sees." | about lead | `<facts>` Role line ("I build ML systems, with a focus on computer vision"). The clause after the colon defines computer vision; it is not a new claim. |
+| 14 | "Outside of that, I'm into reinforcement learning, quant finance and competitive programming." | about | `<facts>` Interests |
+| 15 | NTU Singapore, BSc Data Science and Artificial Intelligence, Year 1 · Class of 2030 | about facts, glance, /llm, md | `<facts>` Education line 1 |
+| 16 | IB Diploma, May 2026. Score 42/45. Math AA HL: 7. | about facts, /llm, md | `<facts>` Education line 2 |
+| 17 | Finalist, IRIS National Science Fair | about facts, /llm, md | `<facts>` Recognition |
+
+## Experience
+| # | Claim | Where | Source |
+|---|---|---|---|
+| 18 | Academic Lead, Datathon organizing team, October 2026 | experience, /llm, md | `<facts>` Experience: Datathon, "Academic Lead, October 2026" |
+| 19 | "More than 450 participants." | same | `<facts>` "More than 450 participants." |
+| 20 | "I designed the problem prompts." | same | `<facts>` "I designed the problem prompts." |
+| 21 | "I built the live leaderboard website." | same | `<facts>` "I built the live leaderboard website." |
+| 22 | Intern, KDK Softwares | same | `<facts>` "KDK Softwares, intern." |
+| 23 | "I worked on backend performance and security." | same | `<facts>` "Backend performance and security." |
+| 24 | "I worked on a migration from PHP to Go." | same | `<facts>` "Migration from PHP to Go." |
+| 25 | Lead Programmer, FRC Team Kaizen, Reefscape 2025 season | same | `<facts>` "FRC Team Kaizen, Lead Programmer… Season: Reefscape 2025." |
+| 26 | "I coordinated technical and outreach work." | same | `<facts>` "I coordinated technical and outreach work." |
+| 27 | "As a rookie team, we qualified for the FIRST World Championships." | same | `<facts>` "qualified for the FIRST World Championships as a rookie team" |
+| 28 | "We won Excellence in Engineering awards, including one in the Newton Division." | same | `<facts>` "The team won Excellence in Engineering awards … and won excellence in engineering in the newton division." |
+| 29 | Co-founder, StemCast. "A podcast for STEM outreach." | same | `<facts>` "StemCast, co-founder. A podcast for STEM outreach." |
+| 30 | Mentor, middle school mentoring. "I taught web development to middle school students." | same | `<facts>` "Mentor for middle school students. I taught web development." |
+
+## Projects
+| # | Claim | Where | Source |
+|---|---|---|---|
+| 31 | BiogasBoosters: "A framework to optimize biogas production." | card, project page, glance, md, txt | `<facts>` Featured project 1 |
+| 32 | "Under the hood it's a reinforcement learning setup. There's a simulated digester environment and a PPO agent with an LSTM feature extractor." | BiogasBoosters page, /llm, md | GitHub `PunyaTaluka123/BiogasBoosters`: `env/biogas_env.py`, `BiogasEnvironment.py` (`BiogasEnv`), `models/core_models.py` (`PPOAgent`, `LSTMFeatureExtractor`), `BiogasModel.py` (`stable_baselines3.PPO`) |
+| 33 | "A Kalman filter smooths the noisy readings." | same | Same repo: `models/core_models.py` (`class KalmanFilter`), used with the environment in `BiogasModel.py` |
+| 34 | "An XGBoost model gives a baseline to compare against." | same | Same repo: `trainers/xgboost_trainer.py`; `scripts/main.py` imports `compare_models` |
+| 35 | Approach: "Reinforcement learning (PPO), LSTM, Kalman filter, XGBoost". Tags: Reinforcement learning, Python, PyTorch | card, project page | Same repo (Python; `import torch` in `models/core_models.py`) |
+| 36 | "Deployment is planned for 2027. The target is a 33% increase in biogas production." Also: Status "Deployment planned for 2027", Target "Targeting a 33% increase in biogas production" | BiogasBoosters page, /llm, md | Rules line: "For BiogasBoosters … State deployment in 2027, 33% increase". Stated as a plan and a target, not a result (DECISIONS D6). |
+| 37 | Basketball Shot Tracking System: "A computer vision system that tracks basketball shots." Tag and area: Computer vision | card, page, glance, md, txt | `<facts>` Featured project 2 ("A computer vision system"). "Tracks basketball shots" is the project name in words. |
+| 38 | "I built it for my IB Computer Science internal assessment." Context: IB Computer Science internal assessment | Basketball page, /llm, md | `<facts>` "I built it for my IB Computer Science internal assessment." |
+| 39 | DermaTrack: "An AI tool for dermatology that I designed." / "DermaTrack is an AI tool for dermatology. I designed it." Area "AI for dermatology", My part "I designed it", tags AI and Dermatology | card, page, glance, md, txt | `<facts>` Featured project 3 ("An AI tool for dermatology"); Rules line: use "designed" |
+| 40 | Also / Other projects: AgriBot, OrthoTrack, Sign language detection (names only) | projects section, /llm, md | `<facts>` Other projects |
+
+## Skills and interests
+| # | Claim | Where | Source |
+|---|---|---|---|
+| 41 | Languages: Go, Python, PHP | skills, /llm, md | `<facts>` Skills |
+| 42 | Areas: Machine learning, Computer vision, Web development | skills, /llm, md | `<facts>` Skills |
+| 43 | Interests: ML and AI engineering, Computer vision, Reinforcement learning, Quant finance, Competitive programming (also JSON-LD `knowsAbout`) | skills, /llm, md, JSON-LD | `<facts>` Interests |
+
+## Removed or avoided during the audit
+- No claim was found without a source, so nothing had to be removed from the built site. Choices I made while writing:
+  - No dates for KDK, StemCast or mentoring, because `<facts>` gives none.
+  - No outcome words for the Basketball tracker.
+  - No IRIS project attribution, because `<facts>` doesn't say which project was the finalist.
+  - No "Worlds" wording for the Newton Division beyond what `<facts>` says.
+- `llms.txt` used to describe `/llm` as having "no styling", which became false once a small stylesheet was added. It is now "no scripts, no animation, plain text".
+
+## Required confirmations
+- **DermaTrack says "designed"**: yes. Every DermaTrack sentence uses "designed", and none says "built", "build", "launched" or "launch". Gate 11 checks this sentence by sentence across all built HTML, Markdown, text and JSON.
+- **BiogasBoosters has no result claims**: yes. The 2027 deployment is "planned", and 33% is a "target". Gate 11 fails if any sentence mentioning biogas contains achieved, increased, improved, resulted, delivered, reduced, grew or saved, or if "33%" appears without "target".
+- **OncoGuard does not appear**: yes. A case-insensitive search of `dist/` and `src/` finds 0 matches, and gate 11 enforces this. The public `OncoGuard` repo is deliberately not linked or mentioned.
+- No hype words ("passionate", "leverage", "cutting-edge", "synergy"). No phone number and no home address.
+
+Unsourced claims: 0.

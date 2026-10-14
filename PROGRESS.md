@@ -20,5 +20,9 @@ Read this first if context was summarized.
 - boot.js applies ?view=llm / localStorage before paint; view transitions skipped in LLM mode.
 - /llm, /llms.txt, /portfolio.md, /content.json, JSON-LD Person, robots.txt (GPTBot, ClaudeBot, PerplexityBot, Google-Extended), sitemap.xml, OG/Twitter meta, og.png.
 - Gate 10 PASS; LLM_TEST.md written from extracted text.
-## Phase 5: Production — open
-## Gates — open (scripts/verify.mjs not written yet)
+## Phase 5: Production — DONE (commit 2e910ff)
+- vercel.json headers + cache, CI workflow (.github/workflows/verify.yml), README, npm audit 0, exact pins + lockfile.
+
+## Gates
+- 1-11: PASS individually (axe 48 runs; Lighthouse 100x4 on 5 pages, LCP ~1.35 s; motion; 96 screenshots, 3 review rounds in VISUAL_REVIEW.md; LLM_TEST.md; FACT_AUDIT.md).
+- 12: fresh-eyes subagent — in progress. Then full `npm run verify` and final report.

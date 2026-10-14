@@ -15,7 +15,7 @@ export const GET: APIRoute = ({ site: base }) => {
     '',
     `- [Portfolio as Markdown](${abs('/portfolio.md')}): everything on the site in one file`,
     `- [Portfolio as JSON](${abs('/content.json')}): the same content as structured data`,
-    `- [Plain HTML version](${abs('/llm')}): no scripts, no styling`,
+    `- [Plain HTML version](${abs('/llm')}): no scripts, no animation, plain text`,
     '',
     '## Pages',
     '',

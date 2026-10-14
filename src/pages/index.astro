@@ -106,7 +106,11 @@ const jsonLd = {
           <p class="when mono">{x.when}</p>
           <div>
             <h3>
-              {x.role} <span class="org">· {x.org}</span>
+              {x.role}
+              <span class="org">
+                <span class="sep">{' · '}</span>
+                {x.org}
+              </span>
             </h3>
             <ul>
               {x.points.map((pt) => (

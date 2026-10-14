@@ -426,29 +426,43 @@ await gate(8, 'Motion test', async () => {
 await gate(9, 'Visual review screenshots', async () => {
   const issues = [];
   let n = 0;
-  for (const path of PAGES)
+  const shoot = async (path, width, mode, reduced, file, scrollTo) => {
+    const pg = await page({
+      viewport: { width, height: width < 768 ? 812 : width < 1440 ? 1024 : 900 },
+      colorScheme: mode === 'dark' ? 'dark' : 'light',
+      reducedMotion: reduced ? 'reduce' : 'no-preference',
+    });
+    await pg.goto(`${BASE}${path}${mode === 'llm' ? '?view=llm' : ''}`, {
+      waitUntil: 'networkidle',
+    });
+    await pg.waitForTimeout(1300);
+    if (scrollTo) {
+      await pg.evaluate((sel) => {
+        const el = document.querySelector(sel);
+        window.scrollTo({ top: el.offsetTop + el.offsetHeight * 0.45, behavior: 'instant' });
+      }, scrollTo);
+      await pg.waitForTimeout(500);
+    }
+    const over = await pg.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    if (over > 0) issues.push(`${path} ${width} ${mode}: horizontal overflow ${over}px`);
+    await pg.screenshot({ path: join(SHOTS, file), fullPage: reduced });
+    n++;
+    await pg.context().close();
+  };
+  for (const path of PAGES) {
+    const name = (path.slice(1) || 'home').replace(/\//g, '-');
     for (const width of [375, 768, 1440])
       for (const mode of ['light', 'dark', 'llm']) {
-        const pg = await page({
-          viewport: { width, height: width < 768 ? 812 : width < 1440 ? 1024 : 900 },
-          colorScheme: mode === 'dark' ? 'dark' : 'light',
-        });
-        await pg.goto(`${BASE}${path}${mode === 'llm' ? '?view=llm' : ''}`, {
-          waitUntil: 'networkidle',
-        });
-        await pg.waitForTimeout(1300);
-        const over = await pg.evaluate(() => document.documentElement.scrollWidth - innerWidth);
-        if (over > 0) issues.push(`${path} ${width} ${mode}: horizontal overflow ${over}px`);
-        await pg.screenshot({
-          path: join(
-            SHOTS,
-            `${(path.slice(1) || 'home').replace(/\//g, '-')}-${width}-${mode}.png`,
-          ),
-          fullPage: true,
-        });
-        n++;
-        await pg.context().close();
+        // Full page in the settled state: scroll-driven reveals below the fold would
+        // otherwise be frozen at their pre-scroll offset. Live motion is gate 8.
+        await shoot(path, width, mode, true, `${name}-${width}-${mode}.png`);
+        if (mode === 'llm') continue;
+        // First screen with normal motion, after the hero has settled.
+        await shoot(path, width, mode, false, `${name}-${width}-${mode}-viewport.png`);
+        if (path === '/')
+          await shoot(path, width, mode, false, `${name}-${width}-${mode}-stack.png`, '.stack');
       }
+  }
   const review = join(ROOT, 'VISUAL_REVIEW.md');
   if (!existsSync(review)) issues.push('VISUAL_REVIEW.md missing');
   else if (!/Open issues: none/i.test(read(review)))

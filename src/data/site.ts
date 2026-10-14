@@ -111,7 +111,7 @@ export const site = {
         { label: 'What', value: 'A framework to optimize biogas production' },
         { label: 'Approach', value: 'Reinforcement learning (PPO), LSTM, Kalman filter, XGBoost' },
         { label: 'Status', value: 'Deployment planned for 2027' },
-        { label: 'Target', value: '33% increase in biogas production' },
+        { label: 'Target', value: 'Targeting a 33% increase in biogas production' },
       ],
       tags: ['Reinforcement learning', 'Python', 'PyTorch'],
       links: [

@@ -35,6 +35,8 @@ export function toMarkdown(base: URL): string {
       '',
       `Page: ${abs(`/projects/${p.slug}`)}`,
       '',
+      p.oneLine,
+      '',
       ...p.body.flatMap((para) => [para, '']),
       ...p.facts.map((f) => `- ${f.label}: ${f.value}`),
       ...p.links.map((l) => `- ${l.label}: ${l.href}`),

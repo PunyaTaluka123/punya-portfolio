@@ -31,14 +31,17 @@ const jsonLd = {
       <span>{site.school}</span>
       <span>{ntu?.when}</span>
     </p>
-    <h1 id="hero-name" class="hero-name">
-      <span class="sr-only">{site.name}</span>
-      {words.map((word) => (
-        <span class="word" aria-hidden="true">
-          {[...word].map((ch) => (
-            <span class="ch">{ch}</span>
-          ))}
-        </span>
+    <!-- One copy of the name: letters are split for the stagger, aria-label keeps it whole. -->
+    <h1 id="hero-name" class="hero-name" aria-label={site.name}>
+      {words.map((word, w) => (
+        <>
+          {w > 0 && ' '}
+          <span class="word">
+            {[...word].map((ch) => (
+              <span class="ch">{ch}</span>
+            ))}
+          </span>
+        </>
       ))}
     </h1>
     <div class="hero-meta">
@@ -103,15 +106,15 @@ const jsonLd = {
     <ol class="sec-body xp reveal">
       {site.experience.map((x) => (
         <li class="xp-row">
-          <p class="when mono">{x.when}</p>
+          <h3>
+            {x.role}
+            <span class="org">
+              <span class="sep">{' · '}</span>
+              {x.org}
+            </span>
+          </h3>
+          {x.when && <p class="when mono">{x.when}</p>}
           <div>
-            <h3>
-              {x.role}
-              <span class="org">
-                <span class="sep">{' · '}</span>
-                {x.org}
-              </span>
-            </h3>
             <ul>
               {x.points.map((pt) => (
                 <li>{pt}</li>
@@ -156,7 +159,7 @@ const jsonLd = {
                 </span>
                 <span>{p.tags.join(' · ')}</span>
               </p>
-              <h3 class={`card-title vt-${i + 1}`} id={`card-${p.slug}`}>
+              <h3 class="card-title" id={`card-${p.slug}`} data-vt={`project-${i + 1}`}>
                 <a href={`/projects/${p.slug}`}>{p.name}</a>
               </h3>
               <div class="card-foot">
@@ -219,22 +222,20 @@ const jsonLd = {
       <span class="mono">05</span>
       <h2 id="contact-h">Contact</h2>
     </div>
-    <div class="sec-body prose reveal">
+    <div class="sec-body prose contact-body reveal">
       <p class="lead">Want to talk ML, computer vision or a project? Send me an email.</p>
       <p>
-        <a class="contact-email" href={`mailto:${site.email}`}>
-          {emailUser}
-          <wbr />@{emailHost}
-        </a>
+        <!-- prettier-ignore -->
+        <a class="contact-email" href={`mailto:${site.email}`}>{emailUser}<wbr />@{emailHost}</a>
       </p>
       <ul class="contact-links">
         <li>
-          <a href={site.links.github} {...ext}>
+          <a class="draw" href={site.links.github} {...ext}>
             GitHub: {site.handles.github}
           </a>
         </li>
         <li>
-          <a href={site.links.linkedin} {...ext}>
+          <a class="draw" href={site.links.linkedin} {...ext}>
             LinkedIn: {site.handles.linkedin}
           </a>
         </li>

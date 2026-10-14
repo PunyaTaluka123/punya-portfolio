@@ -39,6 +39,7 @@ async function gate(id, name, fn) {
   if (only.length && !only.includes(String(id))) return;
   for (const f of readdirSync(REPORTS)) if (f.startsWith(`gate${id}-`)) rmSync(join(REPORTS, f));
   try {
+    if (id >= 5 && id <= 10 && serverError) throw serverError;
     const note = await fn();
     results.push({ id, name, ok: true });
     console.log(`PASS  ${id}. ${name}${note ? ` (${note})` : ''}`);
@@ -120,7 +121,10 @@ function serve() {
       file = join(DIST, '404.html');
       status = 404;
     }
-    const headers = { 'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream' };
+    const headers = {
+      'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream',
+      'X-Verify-Server': '1',
+    };
     for (const rule of vercel.headers)
       if (new RegExp(`^${rule.source}$`).test(path))
         for (const h of rule.headers) headers[h.key] = h.value;
@@ -131,7 +135,17 @@ function serve() {
     }
     res.writeHead(status, headers).end(body);
   });
-  return new Promise((resolve) => server.listen(PORT, () => resolve(server)));
+  return new Promise((resolve, reject) => {
+    server.once('error', reject);
+    server.listen(PORT, async () => {
+      // Another server (e.g. a stray `astro preview`) can hold [::1]:4321 and answer for
+      // localhost instead of this one. Refuse to test anything but our own server.
+      const res = await fetch(`${BASE}/`).catch(() => null);
+      if (res?.headers.get('x-verify-server') === '1') return resolve(server);
+      server.close();
+      reject(new Error(`another server answers on ${BASE}; stop it and rerun`));
+    });
+  });
 }
 
 let browser;
@@ -244,7 +258,14 @@ await gate(4, 'Link check', async () => {
   return `${html.length} pages, ${external.size} external links OK`;
 });
 
-const server = only.length && only.every((g) => +g <= 4) ? null : await serve();
+let serverError = null;
+const server =
+  only.length && only.every((g) => +g <= 4)
+    ? null
+    : await serve().catch((e) => {
+        serverError = e;
+        return null;
+      });
 browser = server ? await chromium.launch() : null;
 
 await gate(5, 'Accessibility (axe)', async () => {
@@ -311,9 +332,15 @@ await gate(6, 'Lighthouse (mobile, throttled)', async () => {
   } finally {
     await lh.close();
   }
-  const scripts = [...read(join(DIST, 'index.html')).matchAll(/<script[^>]+src="(\/[^"]+)"/g)].map(
-    (m) => m[1],
-  );
+  const homeHtml = read(join(DIST, 'index.html'));
+  const scripts = [
+    ...new Set(
+      [
+        ...homeHtml.matchAll(/<script[^>]+src="(\/[^"]+)"/g),
+        ...homeHtml.matchAll(/<link[^>]+rel="modulepreload"[^>]+href="(\/[^"]+)"/g),
+      ].map((m) => m[1]),
+    ),
+  ];
   const jsGz = scripts.reduce((n, s) => n + gzipSync(readFileSync(join(DIST, s))).length, 0);
   if (jsGz >= 120 * 1024) issues.push(`home JS ${jsGz} B gzipped >= 120 KB`);
   writeFileSync(
@@ -337,6 +364,10 @@ await gate(7, 'No-JavaScript fetch (curl)', () => {
   ];
   const missing = need.filter((n) => !html.includes(n));
   must(!missing.length, `missing: ${missing.join(', ')}`);
+  // The hidden #glance alone must not satisfy the check: the visible page needs it too.
+  const outside = html.replace(/<section id="glance"[\s\S]*?<\/section>/, '');
+  const onlyInGlance = need.slice(0, -1).filter((n) => !outside.includes(n));
+  must(!onlyInGlance.length, `only inside #glance: ${onlyInGlance.join(', ')}`);
   must(
     /<section id="glance"[^>]*\shidden/.test(html),
     '#glance lacks the hidden attribute in human mode',
@@ -445,6 +476,17 @@ await gate(9, 'Visual review screenshots', async () => {
     }
     const over = await pg.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     if (over > 0) issues.push(`${path} ${width} ${mode}: horizontal overflow ${over}px`);
+    const clipped = await pg.evaluate(() =>
+      [...document.querySelectorAll('h1, h2, h3, p, li, a, dt, dd, button, .ch')]
+        .filter((el) => el.offsetParent && !el.closest('.sr-only'))
+        .filter((el) => {
+          const r = el.getBoundingClientRect();
+          return r.width > 0 && (r.right > innerWidth + 1 || r.left < -1);
+        })
+        .map((el) => el.textContent.trim().slice(0, 30)),
+    );
+    if (clipped.length)
+      issues.push(`${path} ${width} ${mode}: text off-screen: ${clipped.slice(0, 3).join(' | ')}`);
     await pg.screenshot({ path: join(SHOTS, file), fullPage: reduced });
     n++;
     await pg.context().close();

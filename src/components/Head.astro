@@ -2,6 +2,9 @@
 import { site } from '../data/site';
 import displayFont from '../assets/fonts/bricolage-grotesque-latin-wght.woff2?url';
 import bodyFont from '../assets/fonts/instrument-sans-latin-wght.woff2?url';
+// Hashed URL, so it gets the long immutable cache like the rest of /_astro.
+import bootScript from '../scripts/boot.js?url';
+import { themeColor } from '../lib/tokens';
 
 interface Props {
   title: string;
@@ -53,8 +56,8 @@ const ogImage = new URL('/og.png', Astro.site);
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
 
-<meta name="theme-color" content="#f3f0e8" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content={themeColor.light} media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content={themeColor.dark} media="(prefers-color-scheme: dark)" />
 <link rel="icon" href="/favicon.ico" sizes="32x32" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -64,7 +67,7 @@ const ogImage = new URL('/og.png', Astro.site);
   <>
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
-    <script is:inline src="/boot.js" />
+    <script is:inline src={bootScript} />
   </>
 )}
 {jsonLd && (

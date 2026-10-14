@@ -170,6 +170,11 @@ let cursor: ReturnType<typeof createCursor> = null;
 const themeBtn = document.getElementById('theme-toggle');
 const syncTheme = () => {
   themeBtn?.setAttribute('aria-pressed', String(isDark()));
+  // Browser UI colour follows a manual choice too, not only the system setting.
+  const bg = getComputedStyle(document.body).backgroundColor;
+  document
+    .querySelectorAll('meta[name="theme-color"]')
+    .forEach((m) => m.setAttribute('content', bg));
   field?.recolor();
 };
 themeBtn?.addEventListener('click', () => {
@@ -205,15 +210,35 @@ reduced.addEventListener('change', syncView);
 /* Copy as Markdown */
 const copyBtn = document.getElementById('copy-md');
 const copyStatus = document.getElementById('copy-status');
+const markdown = () =>
+  fetch('/portfolio.md').then((r) =>
+    r.ok ? r.text() : Promise.reject(new Error(String(r.status))),
+  );
 copyBtn?.addEventListener('click', async () => {
   try {
-    const res = await fetch('/portfolio.md');
-    if (!res.ok) throw new Error(String(res.status));
-    await navigator.clipboard.writeText(await res.text());
+    // Safari only allows clipboard writes started inside the click, so hand it a promise
+    // instead of awaiting the fetch first.
+    if ('ClipboardItem' in window)
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': markdown().then((t) => new Blob([t], { type: 'text/plain' })),
+        }),
+      ]);
+    else await navigator.clipboard.writeText(await markdown());
     if (copyStatus) copyStatus.textContent = 'Copied the Markdown to your clipboard.';
   } catch {
     if (copyStatus) copyStatus.textContent = 'Copy failed. Open /portfolio.md instead.';
   }
+});
+
+/* View transition home → project: name only the clicked card's title, so the other
+   (stacked, partly hidden) titles never float above the page mid-transition. */
+addEventListener('pageswap', (e) => {
+  const to = (e as PageSwapEvent).activation?.entry?.url;
+  if (!(e as PageSwapEvent).viewTransition || !to) return;
+  for (const title of document.querySelectorAll<HTMLElement>('[data-vt]'))
+    if (title.querySelector('a')?.href === to)
+      title.style.viewTransitionName = title.dataset['vt'] ?? '';
 });
 
 syncTheme();

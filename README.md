@@ -19,14 +19,14 @@ npm run dev                       # http://localhost:4321
 
 Other scripts:
 
-| Command            | What it does                                                   |
-| ------------------ | -------------------------------------------------------------- |
-| `npm run build`    | Static build into `dist/`                                      |
-| `npm run preview`  | Serve `dist/` on port 4321                                     |
-| `npm run check`    | Type check, lint and format check                              |
-| `npm run format`   | Prettier write                                                 |
-| `npm run assets`   | Re-render `public/og.png`, the PNG icons and `favicon.ico`     |
-| `npm run verify`   | Run all 12 gates (see below)                                   |
+| Command           | What it does                                               |
+| ----------------- | ---------------------------------------------------------- |
+| `npm run build`   | Static build into `dist/`                                  |
+| `npm run preview` | Serve `dist/` on port 4321                                 |
+| `npm run check`   | Type check, lint and format check                          |
+| `npm run format`  | Prettier write                                             |
+| `npm run assets`  | Re-render `public/og.png`, the PNG icons and `favicon.ico` |
+| `npm run verify`  | Run all 12 gates (see below)                               |
 
 ## Edit the content
 
@@ -37,6 +37,7 @@ All text lives in **`src/data/site.ts`**: name, role line, about, education, exp
 - `/portfolio.md`, `/content.json`, `/llms.txt`, `/sitemap.xml` and `/site.webmanifest`
 
 Rules that the gates enforce:
+
 - **Every claim must trace to a source.** Add a row to `FACT_AUDIT.md` for any new claim.
 - **DermaTrack** says "designed", never "built" or "launched".
 - **BiogasBoosters** states its 2027 deployment and 33% figure as a plan and target, never as a result.

@@ -12,7 +12,7 @@ interface Props {
 }
 
 const props = Astro.props;
-const home = Astro.url.pathname === '/';
+const home = Astro.url.pathname.replace(/(index)?\.html$/, '') === '/';
 const sec = (id: string) => (home ? `#${id}` : `/#${id}`);
 const ext = { rel: 'noopener noreferrer' };
 ---
@@ -28,13 +28,12 @@ const ext = { rel: 'noopener noreferrer' };
     </a>
     <header class="site-header">
       <a class="mark" href="/">
-        <span class="short" aria-hidden="true">
-          PT
+        <!-- Visible text is always part of the accessible name (WCAG 2.5.3). -->
+        <span class="short">
+          PT<span class="sr-only">, {site.name}</span>
         </span>
-        <span class="full" aria-hidden="true">
-          {site.name}
-        </span>
-        <span class="sr-only">{site.name}, home</span>
+        <span class="full">{site.name}</span>
+        <span class="sr-only">, home</span>
       </a>
       <nav class="primary-nav" aria-label="Sections">
         <ul>
@@ -94,8 +93,11 @@ const ext = { rel: 'noopener noreferrer' };
     </header>
 
     <main id="main" tabindex="-1">
-      <section id="glance" class="glance" hidden aria-labelledby="glance-title">
-        <h2 id="glance-title">At a glance</h2>
+      <!-- No heading here: in LLM view this block comes before the page's h1. -->
+      <section id="glance" class="glance" hidden aria-label="At a glance">
+        <p class="glance-title">
+          <strong>At a glance</strong>
+        </p>
         <dl>
           <div>
             <dt>Name</dt>
@@ -157,16 +159,24 @@ const ext = { rel: 'noopener noreferrer' };
       <p>© 2026 {site.name}</p>
       <ul>
         <li>
-          <a href="/llm">Machine-readable version</a>
+          <a class="draw" href="/llm">
+            Machine-readable version
+          </a>
         </li>
         <li>
-          <a href="/llms.txt">llms.txt</a>
+          <a class="draw" href="/llms.txt">
+            llms.txt
+          </a>
         </li>
         <li>
-          <a href="/portfolio.md">portfolio.md</a>
+          <a class="draw" href="/portfolio.md">
+            portfolio.md
+          </a>
         </li>
         <li>
-          <a href="/content.json">content.json</a>
+          <a class="draw" href="/content.json">
+            content.json
+          </a>
         </li>
       </ul>
     </footer>

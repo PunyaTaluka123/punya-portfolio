@@ -39,7 +39,7 @@ export const site = {
 
   about: [
     "I'm Punya. I study Data Science and AI at NTU Singapore. I'm in year one, class of 2030.",
-    'I build ML systems. Most of them are about computer vision: getting a model to make sense of what a camera sees.',
+    'I build ML systems. My focus is computer vision: getting a model to make sense of what a camera sees.',
     "Outside of that, I'm into reinforcement learning, quant finance and competitive programming.",
   ],
 
@@ -103,12 +103,10 @@ export const site = {
       name: 'BiogasBoosters',
       oneLine: 'A framework to optimize biogas production.',
       body: [
-        'BiogasBoosters is a framework to optimize biogas production.',
         "Under the hood it's a reinforcement learning setup. There's a simulated digester environment and a PPO agent with an LSTM feature extractor. A Kalman filter smooths the noisy readings. An XGBoost model gives a baseline to compare against.",
         'Deployment is planned for 2027. The target is a 33% increase in biogas production.',
       ],
       facts: [
-        { label: 'What', value: 'A framework to optimize biogas production' },
         { label: 'Approach', value: 'Reinforcement learning (PPO), LSTM, Kalman filter, XGBoost' },
         { label: 'Status', value: 'Deployment planned for 2027' },
         { label: 'Target', value: 'Targeting a 33% increase in biogas production' },
@@ -122,14 +120,10 @@ export const site = {
       slug: 'basketball-shot-tracking',
       name: 'Basketball Shot Tracking System',
       oneLine: 'A computer vision system that tracks basketball shots.',
-      body: [
-        'The Basketball Shot Tracking System is a computer vision system that tracks basketball shots.',
-        'I built it for my IB Computer Science internal assessment.',
-      ],
+      body: ['I built it for my IB Computer Science internal assessment.'],
       facts: [
-        { label: 'What', value: 'A computer vision system that tracks basketball shots' },
         { label: 'Area', value: 'Computer vision' },
-        { label: 'Context', value: 'IB Computer Science internal assessment' },
+        { label: 'My part', value: 'Built it' },
       ],
       tags: ['Computer vision'],
       links: [],
@@ -138,11 +132,10 @@ export const site = {
       slug: 'dermatrack',
       name: 'DermaTrack',
       oneLine: 'An AI tool for dermatology that I designed.',
-      body: ['DermaTrack is an AI tool for dermatology.', 'I designed it.'],
+      body: [],
       facts: [
-        { label: 'What', value: 'An AI tool for dermatology' },
-        { label: 'Area', value: 'AI for dermatology' },
-        { label: 'My part', value: 'I designed it' },
+        { label: 'Area', value: 'AI, dermatology' },
+        { label: 'My part', value: 'Designed it' },
       ],
       tags: ['AI', 'Dermatology'],
       links: [],

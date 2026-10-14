@@ -57,6 +57,23 @@
   --t-hero-md: 19vw;
   --t-hero-lg: min(17vw, 15rem);
   --t-contact: clamp(1.75rem, 0.9rem + 4.4vw, 4.25rem);
+  --t-card: clamp(2rem, 11cqi, 8.5rem); /* sized to the card, not the viewport */
+  --t-mark: 1.125rem;
+  --t-label: 1.25rem;
+  --t-llm-body: 1rem;
+  --t-llm-small: 0.875rem;
+  --t-llm-h3: 1.125rem;
+  --t-llm-h2: 1.375rem;
+  --t-llm-h1: 1.75rem;
+
+  /* tracking */
+  --tr-hero: -0.05em;
+  --tr-tightest: -0.045em;
+  --tr-display: -0.035em;
+  --tr-mark: -0.03em;
+  --tr-snug: -0.02em;
+  --tr-body: -0.01em;
+  --tr-mono: 0.06em;
 
   --lh-tight: 0.9;
   --lh-snug: 1.15;
@@ -77,6 +94,39 @@
   --header-h: 3.5rem;
   --stack-top: 3.75rem; /* room for the sticky progress bar on small screens */
   --measure: 62ch;
+  --measure-short: 30ch;
+  --measure-lead: 28ch;
+  --measure-llm: 82ch;
+  --list-indent: 1.25rem;
+  --list-sep: 0.45em;
+  --hero-indent: 0.35em; /* second line of the name, per breakpoint */
+  --hero-indent-md: 1.1em;
+  --hero-indent-lg: 1.6em;
+  --mask-pad: 0.14em; /* room for descenders inside clip masks */
+  --underline-offset: 0.2em;
+  --underline-gap: 0.15em;
+  --when-offset: 0.6em;
+  --xp-date-col: 11rem;
+  --card-min: min(56svh, 30rem);
+  --card-min-lg: min(68svh, 36rem);
+  --progress-h: min(60svh, 30rem);
+  --bracket: 22px;
+  --bracket-w: 3px;
+  --bracket-off: 8px;
+  --det-offset: 2.1rem;
+  --lift-sm: 2px;
+  --lift: 6px;
+  --reveal-shift: 2.5rem;
+  --cursor: 28px;
+  --icon: 18px;
+  --tap: 44px;
+  --tap-sm: 36px;
+  --tap-lg: 48px;
+  --line: 1px;
+  --line-mid: 1.5px;
+  --line-strong: 2px;
+  --focus-w: 3px;
+  --radius-pill: 999px;
   --radius: 2px;
 
   /* motion */
@@ -86,6 +136,10 @@
   --m-theme: 420ms;
   --m-page: 380ms;
   --m-stagger: 38ms;
+  --m-hero-delay: 80ms;
+  --m-rail-delay: 450ms;
+  --m-off: 0.01ms; /* reduced motion: effectively instant */
+  --rise-from: 130%; /* hero letters start below their clip mask */
   --m-cursor-lerp: 0.18;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);

@@ -75,6 +75,7 @@ import { site } from '../data/site';
           <h3>
             <a href={`/projects/${p.slug}`}>{p.name}</a>
           </h3>
+          <p>{p.oneLine}</p>
           {p.body.map((para) => (
             <p>{para}</p>
           ))}
@@ -139,8 +140,15 @@ import { site } from '../data/site';
 
 <style is:global>
   /* Plain document styling only: readable measure, wraps long URLs, follows system theme. */
+  /* Explicit colours: a transparent page leaves contrast to browser defaults. */
   :root {
     color-scheme: light dark;
+    background: light-dark(#ffffff, #000000);
+    color: light-dark(#000000, #ffffff);
+  }
+
+  a {
+    color: light-dark(#0b3fb3, #9cc2ff);
   }
 
   body {

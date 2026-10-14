@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { site } from '../data/site';
+import { themeColor } from '../lib/tokens';
 
 export const GET: APIRoute = () =>
   new Response(
@@ -9,8 +10,8 @@ export const GET: APIRoute = () =>
       description: site.description,
       start_url: '/',
       display: 'browser',
-      background_color: '#f3f0e8',
-      theme_color: '#f3f0e8',
+      background_color: themeColor.light,
+      theme_color: themeColor.light,
       icons: [
         { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
         { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },

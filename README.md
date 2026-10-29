@@ -1,11 +1,21 @@
 # Punya Taluka: portfolio
 
-A static Astro site with two views:
+**Live: [punya-portfolio-delta.vercel.app](https://punya-portfolio-delta.vercel.app)**
 
-- A **human view**: big type, a live dot "feature map", and scroll motion.
-- An **LLM view**: one plain, linear document. Switch with the header button or `?view=llm`.
+My personal site, built as a static Astro site with two ways to read it:
 
-Every page and machine-readable file is generated from `src/data/site.ts`.
+- A **human view**: big type, a live dot "feature map" on a canvas, an orbiting experience section and scroll motion.
+- An **LLM view**: one plain, linear document with no animation, for recruiters' AI tools and screen readers. Switch with the header button or `?view=llm`.
+
+## What's interesting about it
+
+- **One source of truth.** Every page, the LLM view and the machine-readable files (`/llms.txt`, `/portfolio.md`, `/content.json`, the sitemap and JSON-LD) are generated from a single typed data file, [`src/data/site.ts`](src/data/site.ts). They can't drift apart.
+- **Built to be read by machines as well as people.** Besides the LLM view, `/llms.txt` follows the llms.txt convention, `/portfolio.md` is a Markdown export, `/content.json` is structured data, and every page has schema.org JSON-LD. A `curl` with no JavaScript still gets the name, projects and links.
+- **12 automated quality gates** ([`scripts/verify.mjs`](scripts/verify.mjs), run in CI on every PR): type check, lint and format; a production build; a placeholder scan; an internal and external link check; axe accessibility checks on every page in both views, both themes and two widths; Lighthouse mobile ≥ 95 in every category with LCP < 2 s, CLS < 0.05 and home JS < 120 KB gzipped; a no-JS fetch; reduced-motion checks; full-page screenshots; LLM-view checks; and fact checks against an audit of every claim's source.
+- **Strict security headers.** CSP `script-src 'self'` with no `unsafe-inline`: the theme script that runs before paint (to avoid a flash) is an external, build-hashed file. Also HSTS, nosniff and frame denial in `vercel.json`.
+- **No tracking cookies.** Vercel Web Analytics only; no consent banner needed.
+
+Design and build notes are in [`docs/`](docs/): the design research and chosen direction, a decision log, the fact audit (a source for every claim on the site), the LLM-view test, and the visual and fresh-eyes reviews.
 
 ## Run it
 
@@ -55,7 +65,7 @@ Text that is **not** in `site.ts` (labels and page furniture):
 
 Rules that the gates enforce:
 
-- **Every claim must trace to a source.** Add a row to `FACT_AUDIT.md` for any new claim.
+- **Every claim must trace to a source.** Add a row to `docs/FACT_AUDIT.md` for any new claim.
 - **DermaTrack** says "designed", never "built" or "launched".
 - **BiogasBoosters:** the only result allowed is the 33%, and it must be labelled "measured".
 - Don't use hype words ("passionate", "leverage", "cutting-edge", "synergy").
@@ -84,10 +94,10 @@ npm run verify -- 5 6   # only some gates
 6. Lighthouse mobile (throttled) on every indexable page: each category ≥ 95, LCP < 2 s, CLS < 0.05, home JS < 120 KB gzipped
 7. A `curl` fetch with no JS: name, project titles, GitHub/LinkedIn links and `#glance` present
 8. Motion: hero frames at 0, 0.5, 1.5 and 3 s; a reduced-motion run must show no movement
-9. Full-page screenshots of every page at 375/768/1440 in light, dark and LLM views, plus an overflow check (review notes go in `VISUAL_REVIEW.md`)
+9. Full-page screenshots of every page at 375/768/1440 in light, dark and LLM views, plus an overflow check (review notes go in `docs/VISUAL_REVIEW.md`)
 10. LLM view: toggle, `#glance`, no running animation, Copy as Markdown, and the machine files and JSON-LD
-11. Fact checks: no OncoGuard, DermaTrack says "designed", Biogas is a target only, no hype words, no phone numbers; `FACT_AUDIT.md` present
-12. Fresh-eyes review (`REVIEW.md`) has no open items
+11. Fact checks: no OncoGuard, DermaTrack says "designed", the BiogasBoosters 33% is labelled measured, no hype words, no phone numbers; `docs/FACT_AUDIT.md` present
+12. Fresh-eyes review (`docs/REVIEW.md`) has no open items
 
 Output goes to `reports/` and `screenshots/`, which git ignores. CI runs the same command on every pull request (`.github/workflows/verify.yml`).
 
@@ -126,6 +136,7 @@ src/scripts/boot.js       pre-paint theme/view (no flash, CSP-safe), hashed by t
 src/pages/                pages and machine-readable endpoints
 scripts/verify.mjs        the gates
 scripts/assets.mjs        OG image and icons
+docs/                     design research, decisions, fact audit, reviews
 ```
 
 Fonts: Bricolage Grotesque and Instrument Sans (SIL OFL 1.1). They are self-hosted, and their licences are in `src/assets/fonts/`.

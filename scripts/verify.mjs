@@ -548,8 +548,8 @@ await gate(9, 'Visual review screenshots', async () => {
           await shoot(path, width, mode, false, `${name}-${width}-${mode}-stack.png`, '.stack');
       }
   }
-  const review = join(ROOT, 'VISUAL_REVIEW.md');
-  if (!existsSync(review)) issues.push('VISUAL_REVIEW.md missing');
+  const review = join(ROOT, 'docs', 'VISUAL_REVIEW.md');
+  if (!existsSync(review)) issues.push('docs/VISUAL_REVIEW.md missing');
   else if (!/Open issues: none/i.test(read(review)))
     issues.push('VISUAL_REVIEW.md still lists open issues');
   fail(issues, 'gate9-visual.txt');
@@ -656,7 +656,7 @@ await gate(10, 'LLM view test', async () => {
     if (!/<link rel="alternate" type="text\/markdown" href="\/portfolio\.md"/.test(h))
       issues.push(`${page} lacks markdown alternate link`);
   }
-  if (!existsSync(join(ROOT, 'LLM_TEST.md'))) issues.push('LLM_TEST.md missing');
+  if (!existsSync(join(ROOT, 'docs', 'LLM_TEST.md'))) issues.push('docs/LLM_TEST.md missing');
   fail(issues, 'gate10-llm.txt');
   return 'toggle, #glance, no motion, files and JSON-LD OK';
 });
@@ -689,16 +689,16 @@ await gate(11, 'Fact audit checks', () => {
   }
   const derma = read(join(DIST, 'projects/dermatrack.html'));
   if (!/designed/.test(visibleText(derma))) issues.push('DermaTrack page does not say "designed"');
-  const audit = join(ROOT, 'FACT_AUDIT.md');
-  if (!existsSync(audit)) issues.push('FACT_AUDIT.md missing');
+  const audit = join(ROOT, 'docs', 'FACT_AUDIT.md');
+  if (!existsSync(audit)) issues.push('docs/FACT_AUDIT.md missing');
   else if (/UNSOURCED/.test(read(audit))) issues.push('FACT_AUDIT.md lists unsourced claims');
   fail(issues, 'gate11-facts.txt');
   return `${files.length} files: no OncoGuard, DermaTrack "designed", Biogas: only the measured 33%`;
 });
 
 await gate(12, 'Fresh-eyes review', () => {
-  const review = join(ROOT, 'REVIEW.md');
-  must(existsSync(review), 'REVIEW.md missing (run the fresh-eyes subagent)');
+  const review = join(ROOT, 'docs', 'REVIEW.md');
+  must(existsSync(review), 'docs/REVIEW.md missing (run the fresh-eyes subagent)');
   const open = read(review).match(/^- \[ \].*$/gm) ?? [];
   must(!open.length, `${open.length} open item(s): ${open[0]}`);
   return 'all findings resolved';

@@ -1,6 +1,6 @@
 // Single source of truth for every page and machine-readable file.
 // Edit content here only. See README "Edit the content".
-// Sources for every claim are listed in FACT_AUDIT.md.
+// Sources for every claim are listed in docs/FACT_AUDIT.md.
 
 export interface Project {
   slug: string;

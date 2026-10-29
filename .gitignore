@@ -8,3 +8,4 @@ dist/
 screenshots/
 reports/
 .DS_Store
+.claude/
